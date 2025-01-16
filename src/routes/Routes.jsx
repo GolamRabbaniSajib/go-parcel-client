@@ -11,6 +11,7 @@ import MyParcels from "../Pages/Dashboard/userDashboard/MyParcels";
 import Profile from "../Pages/Dashboard/common/Profile";
 import AllParcels from "../Pages/Dashboard/AdminDashboard/AllParcels";
 import AllDeliveryMen from "../Pages/Dashboard/AdminDashboard/AllDeliveryMen";
+import AllUsers from "../Pages/Dashboard/AdminDashboard/AllUsers";
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: 'all-delivery-men',
         element: <AllDeliveryMen></AllDeliveryMen>
+      },
+      {
+        path: 'all-users',
+        element: <AllUsers></AllUsers>
       }
     ],
   },
