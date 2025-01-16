@@ -1,73 +1,24 @@
-
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AllUsers = () => {
-  // Static data for users
-  const users = [
-    {
-      id: 1,
-      name: "User A",
-      phone: "123-456-7890",
-      parcels: 3,
-      totalSpent: 150,
+  const axiosSecure = useAxiosSecure();
+  // data load
+  const { data: users = [] } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("users");
+      return res.data;
     },
-    {
-      id: 2,
-      name: "User B",
-      phone: "098-765-4321",
-      parcels: 5,
-      totalSpent: 250,
-    },
-    {
-      id: 3,
-      name: "User C",
-      phone: "456-789-1230",
-      parcels: 1,
-      totalSpent: 50,
-    },
-    {
-      id: 4,
-      name: "User D",
-      phone: "789-123-4567",
-      parcels: 2,
-      totalSpent: 100,
-    },
-    {
-      id: 5,
-      name: "User E",
-      phone: "321-654-9870",
-      parcels: 4,
-      totalSpent: 200,
-    },
-    {
-      id: 6,
-      name: "User F",
-      phone: "654-321-0987",
-      parcels: 6,
-      totalSpent: 300,
-    },
-    {
-      id: 7,
-      name: "User G",
-      phone: "987-654-3210",
-      parcels: 3,
-      totalSpent: 150,
-    },
-    {
-      id: 8,
-      name: "User H",
-      phone: "741-852-9630",
-      parcels: 7,
-      totalSpent: 350,
-    },
-  ];
+  });
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
 
-  // Calculate paginated users
+  // Calculate paginate
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
@@ -120,22 +71,22 @@ const AllUsers = () => {
               <td className="border p-4 font-medium text-gray-800">
                 {user.name}
               </td>
-              <td className="border p-4">{user.phone}</td>
+              <td className="border p-4">{user.phone ? user.phone : "N/A"}</td>
               <td className="border p-4 text-center font-bold text-blue-600">
-                {user.parcels}
+                {user.parcelCount ? user.parcelCount : "N/A"}
               </td>
               <td className="border p-4 text-center font-bold text-green-500">
-                ${user.totalSpent}
+                $ {user.totalSpent ? user.totalSpent : "N/A"}
               </td>
               <td className="border p-4 text-center">
                 <button
-                  onClick={() => handleMakeDeliveryMen(user.id)}
+                  onClick={() => handleMakeDeliveryMen(user._id)}
                   className="bg-yellow-500 px-4 py-1 rounded-lg text-black cursor-pointer hover:bg-yellow-700 mx-1"
                 >
                   Make Delivery Man
                 </button>
                 <button
-                  onClick={() => handleMakeAdmin(user.id)}
+                  onClick={() => handleMakeAdmin(user._id)}
                   className="bg-red-500 px-4 py-1 rounded-lg text-white cursor-pointer hover:bg-red-700 mx-1"
                 >
                   Make Admin

@@ -3,10 +3,12 @@ import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../hooks/useAuth";
 import { toast } from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const SignUp = () => {
   const { createUser, updateUserProfile, signInWithGoogle, loading } =
     useAuth();
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   // form submit handler
   const handleSubmit = async (event) => {
@@ -15,7 +17,7 @@ const SignUp = () => {
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
-
+    const userInfo = { name, email, roleType: "normalUser", totalSpent: 0, parcelCount: 0 };
     try {
       //2. User Registration
       const result = await createUser(email, password);
@@ -25,10 +27,13 @@ const SignUp = () => {
         name,
         "https://lh3.googleusercontent.com/a/ACg8ocKUMU3XIX-JSUB80Gj_bYIWfYudpibgdwZE1xqmAGxHASgdvCZZ=s96-c"
       );
+      await axiosPublic.post("/users", userInfo).then((result) => {
+        if (result.data.insertedId) {
+          navigate("/");
+          toast.success("Signup Successful");
+        }
+      });
       console.log(result);
-
-      navigate("/");
-      toast.success("Signup Successful");
     } catch (err) {
       console.log(err);
       toast.error(err?.message);
