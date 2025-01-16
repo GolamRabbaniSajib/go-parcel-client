@@ -18,7 +18,7 @@ const Navbar = () => {
               <img src={logo} alt="logo" className="h-8 w-8" />
             </Link>
             <div className="flex items-center space-x-4">
-              <NavLink to={'/home'}>Home</NavLink>
+              <NavLink to={'/'}>Home</NavLink>
               <p><IoNotificationsCircleSharp className="text-4xl" /></p>
               {user && user?.displayName ? (
                 <div className="relative">
@@ -39,9 +39,9 @@ const Navbar = () => {
                         <p className="font-bold">{user.displayName}</p>
                       </div>
                       <>
-                        <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
-                          <Link to="/dashboard">Dashboard</Link>
-                        </div>
+                        
+                          <Link to="/dashboard"><div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">Dashboard</div></Link>
+                        
                         <div
                           onClick={logOut}
                           className="px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer"
