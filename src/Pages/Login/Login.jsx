@@ -4,8 +4,10 @@ import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 import LoadingSpinner from "../../Components/Shared/LoadingSpinner/LoadingSpinner";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Login = () => {
+  const axiosPublic = useAxiosPublic()
   const { signIn, signInWithGoogle, loading, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,9 +37,21 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     try {
       //User Registration using google
-      await signInWithGoogle();
-      navigate(from, { replace: true });
-      toast.success("Login Successful");
+      const result = await signInWithGoogle();
+      const userData = result.user;
+      const userInfo = {
+        name: userData.displayName,
+        email: userData.email,
+        roleType: "normalUser",
+        totalSpent: 0,
+        parcelCount: 0,
+      };
+      await axiosPublic.post("/users", userInfo).then((result) => {
+        if (result.data.insertedId) {
+          navigate("/");
+          toast.success("Signup Successful");
+        }
+      });
     } catch (err) {
       console.log(err);
       toast.error(err?.message);

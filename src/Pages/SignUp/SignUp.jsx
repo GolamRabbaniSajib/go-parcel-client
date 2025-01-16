@@ -17,7 +17,13 @@ const SignUp = () => {
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
-    const userInfo = { name, email, roleType: "normalUser", totalSpent: 0, parcelCount: 0 };
+    const userInfo = {
+      name,
+      email,
+      roleType: "normalUser",
+      totalSpent: 0,
+      parcelCount: 0,
+    };
     try {
       //2. User Registration
       const result = await createUser(email, password);
@@ -44,10 +50,21 @@ const SignUp = () => {
   const handleGoogleSignIn = async () => {
     try {
       //User Registration using google
-      await signInWithGoogle();
-
-      navigate("/");
-      toast.success("Signup Successful");
+      const result = await signInWithGoogle();
+      const userData = result.user;
+      const userInfo = {
+        name: userData.displayName,
+        email: userData.email,
+        roleType: "normalUser",
+        totalSpent: 0,
+        parcelCount: 0,
+      };
+      await axiosPublic.post("/users", userInfo).then((result) => {
+        if (result.data.insertedId) {
+          navigate("/");
+          toast.success("Signup Successful");
+        }
+      });
     } catch (err) {
       console.log(err);
       toast.error(err?.message);

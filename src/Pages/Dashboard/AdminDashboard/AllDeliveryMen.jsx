@@ -1,38 +1,19 @@
-
 import { motion } from "framer-motion";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const AllDeliveryMen = () => {
+  const axiosSecure = useAxiosSecure();
+  // data load
+  const { data: deliveryMen = [] } = useQuery({
+    queryKey: ["deliveryMen"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/users/deliveryMan");
+      return res.data;
+    },
+  });
   // Static data for delivery men
-  const deliveryMen = [
-    {
-      id: 1,
-      name: "Delivery Man A",
-      phone: "123-456-7890",
-      parcelsDelivered: 120,
-      avgReview: 4.5,
-    },
-    {
-      id: 2,
-      name: "Delivery Man B",
-      phone: "098-765-4321",
-      parcelsDelivered: 95,
-      avgReview: 4.2,
-    },
-    {
-      id: 3,
-      name: "Delivery Man C",
-      phone: "456-789-1230",
-      parcelsDelivered: 75,
-      avgReview: 4.0,
-    },
-    {
-      id: 4,
-      name: "Delivery Man D",
-      phone: "789-123-4567",
-      parcelsDelivered: 50,
-      avgReview: 3.8,
-    },
-  ];
+  
 
   return (
     <div className="p-8 bg-gradient-to-r from-green-50 to-green-100 min-h-screen">
