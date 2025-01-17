@@ -6,6 +6,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { Link } from "react-router-dom";
 const MyParcels = () => {
   const [filterStatus, setFilterStatus] = useState("");
   const { user } = useAuth();
@@ -152,6 +153,7 @@ const MyParcels = () => {
                     </span>
                   </td>
                   <td className="py-4 px-4 space-x-2">
+                    <Link to={`/dashboard/updateParcel/${parcel._id}`}>
                     <button
                       className={`btn btn-sm px-4 py-2 ${
                         parcel.status === "Pending"
@@ -161,7 +163,7 @@ const MyParcels = () => {
                       disabled={parcel.status !== "Pending"}
                     >
                       Update
-                    </button>
+                    </button></Link>
                     <button
                       onClick={() => modalCancel(parcel._id)}
                       className={`btn btn-sm px-4 py-2 ${

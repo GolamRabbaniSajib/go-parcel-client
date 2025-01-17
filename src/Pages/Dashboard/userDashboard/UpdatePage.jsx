@@ -1,12 +1,24 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import useAuth from "../../../hooks/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 const UpdatePage = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
+  const { id } = useParams();
   const [price, setPrice] = useState(0);
   const axiosSecure = useAxiosSecure();
+
+  const { data: parcel = [] } = useQuery({
+    queryKey: ["update-parcel"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/parcel/${id}`);
+      return res.data;
+    },
+  });
 
   const calculatePrice = (weight) => {
     if (weight <= 1) return 50;
@@ -42,19 +54,13 @@ const UpdatePage = () => {
       latitude: parseFloat(formData.get("latitude")),
       longitude: parseFloat(formData.get("longitude")),
       price: price,
-      status: "Pending",
     };
 
-    const parcelPrice = parseFloat(price);
-    console.log(parcelPrice)
-
-    axiosSecure.put(`/users/${user.email}`, {parcelPrice}).then((result) => {
-      console.log(result);
-    });
-
-    axiosSecure.post("/parcels", parcelData).then((result) => {
-      if (result.data.insertedId) {
-        toast.success(" Successfully Parcel Book");
+    axiosSecure.put(`/update-parcel/${id}`, parcelData).then((result) => {
+      console.log(result.data);
+      if (result.data.modifiedCount) {
+        navigate("/dashboard/my-parcels");
+        toast.success("Parcel Update Successful");
       }
     });
 
@@ -116,6 +122,7 @@ const UpdatePage = () => {
           </label>
           <input
             type="text"
+            defaultValue={parcel.phone}
             name="phone"
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             required
@@ -129,6 +136,7 @@ const UpdatePage = () => {
           </label>
           <input
             type="text"
+            defaultValue={parcel.parcelType}
             name="parcelType"
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             required
@@ -143,6 +151,7 @@ const UpdatePage = () => {
           <input
             type="number"
             name="weight"
+            defaultValue={parcel.weight}
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             min="0.1"
             step="0.1"
@@ -158,6 +167,7 @@ const UpdatePage = () => {
           </label>
           <input
             type="text"
+            defaultValue={parcel.receiverName}
             name="receiverName"
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             required
@@ -171,6 +181,7 @@ const UpdatePage = () => {
           </label>
           <input
             type="text"
+            defaultValue={parcel.receiverPhone}
             name="receiverPhone"
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             required
@@ -184,6 +195,7 @@ const UpdatePage = () => {
           </label>
           <input
             type="text"
+            defaultValue={parcel.deliveryAddress}
             name="deliveryAddress"
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             required
@@ -197,6 +209,7 @@ const UpdatePage = () => {
           </label>
           <input
             type="date"
+            defaultValue={parcel.deliveryDate}
             name="deliveryDate"
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             required
@@ -211,6 +224,7 @@ const UpdatePage = () => {
           <input
             type="number"
             name="latitude"
+            defaultValue={parcel.latitude}
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             required
           />
@@ -223,6 +237,7 @@ const UpdatePage = () => {
           </label>
           <input
             type="number"
+            defaultValue={parcel.longitude}
             name="longitude"
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             required
@@ -237,6 +252,7 @@ const UpdatePage = () => {
           <input
             type="text"
             name="price"
+            defaultValue={parcel.price}
             value={price}
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
             readOnly

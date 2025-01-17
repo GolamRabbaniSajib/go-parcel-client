@@ -14,6 +14,7 @@ import AllDeliveryMen from "../Pages/Dashboard/AdminDashboard/AllDeliveryMen";
 import AllUsers from "../Pages/Dashboard/AdminDashboard/AllUsers";
 import MyDeliveryList from "../Pages/Dashboard/DeleveryDashBoard/MyDeliveryList";
 import MyReviews from "../Pages/Dashboard/DeleveryDashBoard/MyReviews";
+import UpdatePage from "../Pages/Dashboard/userDashboard/UpdatePage";
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: "my-profile",
         element: <Profile></Profile>,
+      },
+      {
+        path: '/dashboard/updateParcel/:id',
+        element: <UpdatePage></UpdatePage>
       },
       // for admin
       {
