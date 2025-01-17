@@ -2,11 +2,13 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import toast, { Toaster } from "react-hot-toast";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
-  // data load
-  const { data: users = [] } = useQuery({
+
+  // Load users data
+  const { data: users = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axiosSecure.get("users");
@@ -18,28 +20,54 @@ const AllUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
 
-  // Calculate paginate
+  // Calculate pagination
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
 
-  // Handle page change
   const totalPages = Math.ceil(users.length / usersPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Button Handlers
-  const handleMakeDeliveryMen = (id) => {
-    alert(`User with ID: ${id} is now a Delivery Man.`);
-    // Implement API call to update user role in the database.
+  const handleMakeDeliveryMen = async (id) => {
+    try {
+      const response = await axiosSecure.patch(`/users/${id}`, {
+        role: "Delivery Man",
+      });
+      if (response.data.success) {
+        toast.success("User role updated to Delivery Man!");
+        refetch(); // Refresh user data
+      } else {
+        toast.error("Failed to update user role. Try again.");
+      }
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      toast.error("An error occurred while updating the role.");
+    }
   };
 
-  const handleMakeAdmin = (id) => {
-    alert(`User with ID: ${id} is now an Admin.`);
-    // Implement API call to update user role in the database.
+  const handleMakeAdmin = async (id) => {
+    try {
+      const response = await axiosSecure.patch(`/users/${id}`, {
+        role: "Admin",
+      });
+      if (response.data.success) {
+        toast.success("User role updated to Admin!");
+        refetch(); // Refresh user data
+      } else {
+        toast.error("Failed to update user role. Try again.");
+      }
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      toast.error("An error occurred while updating the role.");
+    }
   };
 
   return (
     <div className="p-8 bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen">
+      {/* React Hot Toast */}
+      <Toaster position="top-center" reverseOrder={false} />
+
       <h1 className="text-4xl font-bold text-yellow-600 text-center mb-6 animate-pulse">
         All Users
       </h1>
@@ -63,7 +91,7 @@ const AllUsers = () => {
         <tbody>
           {currentUsers.map((user) => (
             <motion.tr
-              key={user.id}
+              key={user._id}
               className="hover:bg-blue-50"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
@@ -71,12 +99,12 @@ const AllUsers = () => {
               <td className="border p-4 font-medium text-gray-800">
                 {user.name}
               </td>
-              <td className="border p-4">{user.phone ? user.phone : "N/A"}</td>
+              <td className="border p-4">{user.phone || "N/A"}</td>
               <td className="border p-4 text-center font-bold text-blue-600">
-                {user.parcelCount ? user.parcelCount : "N/A"}
+                {user.parcelCount || "N/A"}
               </td>
               <td className="border p-4 text-center font-bold text-green-500">
-                $ {user.totalSpent ? user.totalSpent : "N/A"}
+                $ {user.totalSpent || "N/A"}
               </td>
               <td className="border p-4 text-center">
                 <button

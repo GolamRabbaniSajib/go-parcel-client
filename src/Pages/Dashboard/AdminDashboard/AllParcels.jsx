@@ -2,33 +2,96 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const AllParcels = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const axiosSecure = useAxiosSecure();
 
-  // data load
-  const { data: parcels = [] } = useQuery({
-    queryKey: ["all-parcels"],
+  // Fetch parcels with optional date range
+  const { data: parcels = [], refetch } = useQuery({
+    queryKey: ["all-parcels", { from: fromDate, to: toDate }],
+    queryFn: async ({ queryKey }) => {
+      const [, { from, to } = {}] = queryKey;
+      const query = from && to ? `?from=${from}&to=${to}` : "";
+      const res = await axiosSecure.get(`/all-parcels${query}`);
+      return res.data;
+    },
+    keepPreviousData: true,
+  });
+
+  // Fetch delivery men
+  const { data: deliveryMen = [] } = useQuery({
+    queryKey: ["deliveryMenSelect"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/all-parcels");
+      const res = await axiosSecure.get("/users/deliveryMan");
       return res.data;
     },
   });
 
-  // Static data for delivery men
-  const deliveryMen = [
-    { id: 1, name: "Delivery Man A" },
-    { id: 2, name: "Delivery Man B" },
-    { id: 3, name: "Delivery Man C" },
-  ];
+  // Handle search functionality
+  const handleSearch = () => {
+    if (fromDate && toDate) {
+      refetch();
+    } else {
+      toast.error("Please select both dates.");
+    }
+  };
+
+  // Handle parcel assignment
+  const handleAssign = () => {
+    if (
+      selectedParcel.deliveryManId &&
+      selectedParcel.approximateDeliveryDate
+    ) {
+      axiosSecure
+        .put(`/update-parcel/${selectedParcel._id}`, {
+          status: "On The Way",
+          deliveryManId: selectedParcel.deliveryManId,
+          approximateDeliveryDate: selectedParcel.approximateDeliveryDate,
+        })
+        .then(() => {
+          toast.success("Parcel assigned successfully!");
+          setSelectedParcel(null); // Close modal
+          refetch(); // Refresh data
+        })
+        .catch(() => toast.error("Failed to assign parcel."));
+    } else {
+      toast.error("Please fill in all fields.");
+    }
+  };
 
   return (
     <div className="bg-gradient-to-r from-blue-50 to-blue-100">
-      <div className="p-8  min-h-screen">
+      <div className="p-8 min-h-screen">
         <h1 className="text-4xl font-bold text-blue-600 text-center mb-6 animate-pulse">
           All Parcels
         </h1>
+
+        {/* Search Section */}
+        <div className="flex gap-4 mb-6">
+          <input
+            type="date"
+            className="border p-2 rounded"
+            value={fromDate}
+            onChange={(e) => setFromDate(e.target.value)}
+          />
+          <input
+            type="date"
+            className="border p-2 rounded"
+            value={toDate}
+            onChange={(e) => setToDate(e.target.value)}
+          />
+          <motion.button
+            className="bg-blue-500 px-4 py-2 text-white rounded hover:bg-blue-700"
+            whileTap={{ scale: 0.9 }}
+            onClick={handleSearch}
+          >
+            Search
+          </motion.button>
+        </div>
 
         {/* Parcels Table */}
         <motion.table
@@ -122,7 +185,7 @@ const AllParcels = () => {
                 >
                   <option value="">Select</option>
                   {deliveryMen.map((man) => (
-                    <option key={man.id} value={man.id}>
+                    <option key={man._id} value={man._id}>
                       {man.name}
                     </option>
                   ))}
@@ -144,10 +207,7 @@ const AllParcels = () => {
                   <motion.button
                     className="bg-green-500 px-4 py-2 text-white rounded hover:bg-green-700"
                     whileTap={{ scale: 0.9 }}
-                    onClick={() => {
-                      console.log("Assigned Parcel:", selectedParcel);
-                      setSelectedParcel(null);
-                    }}
+                    onClick={handleAssign}
                   >
                     Assign
                   </motion.button>
