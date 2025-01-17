@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 const BookParcel = () => {
   const { user } = useAuth();
   const [price, setPrice] = useState(0);
+  const axiosSecure = useAxiosSecure();
 
   const calculatePrice = (weight) => {
     if (weight <= 1) return 50;
@@ -26,7 +29,7 @@ const BookParcel = () => {
     const formData = new FormData(e.target);
 
     // Extract all data into an orderData object
-    const orderData = {
+    const parcelData = {
       name: user.displayName,
       email: user.email,
       phone: formData.get("phone"),
@@ -38,11 +41,24 @@ const BookParcel = () => {
       deliveryDate: formData.get("deliveryDate"),
       latitude: parseFloat(formData.get("latitude")),
       longitude: parseFloat(formData.get("longitude")),
-      price: price, // Dynamically calculated price
-      status: "Pending", // Default status
+      price: price,
+      status: "Pending",
     };
 
-    console.log("Order Data:", orderData);
+    const parcelPrice = parseFloat(price);
+    console.log(parcelPrice)
+
+    axiosSecure.put(`/users/${user.email}`, {parcelPrice}).then((result) => {
+      console.log(result);
+    });
+
+    axiosSecure.post("/parcels", parcelData).then((result) => {
+      if (result.data.insertedId) {
+        toast.success(" Successfully Parcel Book");
+      }
+    });
+
+    console.log("Order Data:", parcelData);
   };
   return (
     <motion.div

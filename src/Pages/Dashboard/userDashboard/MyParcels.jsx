@@ -1,39 +1,21 @@
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 const MyParcels = () => {
   const [filterStatus, setFilterStatus] = useState("");
+  const {user} = useAuth()
+  const axiosSecure = useAxiosSecure()
 
-  // Static parcel data
-  const parcels = [
-    {
-      _id: "1",
-      parcelType: "Electronics",
-      requestedDeliveryDate: "2025-01-20",
-      approxDeliveryDate: "2025-01-25",
-      bookingDate: "2025-01-15",
-      deliveryMenId: "DM001",
-      status: "pending",
+  const { data: parcels = [], refetch } = useQuery({
+    queryKey: ["parcels"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/parcels/${user.email}`);
+      return res.data;
     },
-    {
-      _id: "2",
-      parcelType: "Clothing",
-      requestedDeliveryDate: "2025-01-22",
-      approxDeliveryDate: "2025-01-27",
-      bookingDate: "2025-01-16",
-      deliveryMenId: "DM002",
-      status: "delivered",
-    },
-    {
-      _id: "3",
-      parcelType: "Groceries",
-      requestedDeliveryDate: "2025-01-18",
-      approxDeliveryDate: "2025-01-20",
-      bookingDate: "2025-01-14",
-      deliveryMenId: "",
-      status: "on the way",
-    },
-  ];
+  });
 
   const filteredParcels = filterStatus
     ? parcels.filter((parcel) => parcel.status === filterStatus)
@@ -104,7 +86,7 @@ const MyParcels = () => {
                   className="hover:bg-gray-100"
                 >
                   <td className="py-4 px-4">{parcel.parcelType}</td>
-                  <td className="py-4 px-4">{parcel.requestedDeliveryDate}</td>
+                  <td className="py-4 px-4">{parcel.deliveryDate}</td>
                   <td className="py-4 px-4">
                     {parcel.approxDeliveryDate || "N/A"}
                   </td>
@@ -115,7 +97,7 @@ const MyParcels = () => {
                   <td className="py-4 px-4">
                     <span
                       className={`px-3 py-1 rounded-full text-xs ${
-                        parcel.status === "pending"
+                        parcel.status === "Pending"
                           ? "bg-yellow-100 text-yellow-700"
                           : parcel.status === "on the way"
                           ? "bg-blue-100 text-blue-700"
@@ -128,21 +110,21 @@ const MyParcels = () => {
                   <td className="py-4 px-4 space-x-2">
                     <button
                       className={`btn btn-sm px-4 py-2 ${
-                        parcel.status === "pending"
+                        parcel.status === "Pending"
                           ? "bg-blue-500 hover:bg-blue-600 text-white"
                           : "bg-gray-300 cursor-not-allowed text-gray-600"
                       }`}
-                      disabled={parcel.status !== "pending"}
+                      disabled={parcel.status !== "Pending"}
                     >
                       Update
                     </button>
                     <button
                       className={`btn btn-sm px-4 py-2 ${
-                        parcel.status === "pending"
+                        parcel.status === "Pending"
                           ? "bg-red-500 hover:bg-red-600 text-white"
                           : "bg-gray-300 cursor-not-allowed text-gray-600"
                       }`}
-                      disabled={parcel.status !== "pending"}
+                      disabled={parcel.status !== "Pending"}
                     >
                       Cancel
                     </button>
