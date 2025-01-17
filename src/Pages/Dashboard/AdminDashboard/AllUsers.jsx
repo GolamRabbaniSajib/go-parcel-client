@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -31,10 +31,10 @@ const AllUsers = () => {
   // Button Handlers
   const handleMakeDeliveryMen = async (id) => {
     try {
-      const response = await axiosSecure.patch(`/users/${id}`, {
-        role: "Delivery Man",
+      const response = await axiosSecure.patch(`/user/${id}`, {
+        roleType: "deliveryMan",
       });
-      if (response.data.success) {
+      if (response.data.modifiedCount) {
         toast.success("User role updated to Delivery Man!");
         refetch(); // Refresh user data
       } else {
@@ -48,10 +48,10 @@ const AllUsers = () => {
 
   const handleMakeAdmin = async (id) => {
     try {
-      const response = await axiosSecure.patch(`/users/${id}`, {
-        role: "Admin",
+      const response = await axiosSecure.patch(`/user/${id}`, {
+        roleType: "admin",
       });
-      if (response.data.success) {
+      if (response.data.modifiedCount) {
         toast.success("User role updated to Admin!");
         refetch(); // Refresh user data
       } else {
@@ -66,7 +66,6 @@ const AllUsers = () => {
   return (
     <div className="p-8 bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen">
       {/* React Hot Toast */}
-      <Toaster position="top-center" reverseOrder={false} />
 
       <h1 className="text-4xl font-bold text-yellow-600 text-center mb-6 animate-pulse">
         All Users

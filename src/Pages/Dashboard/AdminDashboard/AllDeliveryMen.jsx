@@ -13,7 +13,6 @@ const AllDeliveryMen = () => {
     },
   });
   // Static data for delivery men
-  
 
   return (
     <div className="p-8 bg-gradient-to-r from-green-50 to-green-100 min-h-screen">
@@ -47,12 +46,12 @@ const AllDeliveryMen = () => {
               <td className="border p-4 font-medium text-gray-800">
                 {man.name}
               </td>
-              <td className="border p-4">{man.phone}</td>
+              <td className="border p-4">{man.phone || "N/A"}</td>
               <td className="border p-4 text-center font-bold text-green-600">
-                {man.parcelsDelivered}
+                {man.parcelsDelivered || "N/A"}
               </td>
               <td className="border p-4 text-center font-bold text-yellow-500">
-                {man.avgReview} ★
+                {man.avgReview || "N/A"} ★
               </td>
             </motion.tr>
           ))}
