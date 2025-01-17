@@ -8,6 +8,15 @@ const BookParcel = () => {
   const [price, setPrice] = useState(0);
   const axiosSecure = useAxiosSecure();
 
+  // Get today's date in 'YYYY-MM-DD' format
+  const getCurrentDate = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+    const dd = String(today.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
   const calculatePrice = (weight) => {
     if (weight <= 1) return 50;
     if (weight <= 2) return 100;
@@ -38,6 +47,7 @@ const BookParcel = () => {
       receiverName: formData.get("receiverName"),
       receiverPhone: formData.get("receiverPhone"),
       deliveryAddress: formData.get("deliveryAddress"),
+      bookingDate: formData.get("bookingDate"),
       deliveryDate: formData.get("deliveryDate"),
       latitude: parseFloat(formData.get("latitude")),
       longitude: parseFloat(formData.get("longitude")),
@@ -46,9 +56,9 @@ const BookParcel = () => {
     };
 
     const parcelPrice = parseFloat(price);
-    console.log(parcelPrice)
+    console.log(parcelPrice);
 
-    axiosSecure.put(`/users/${user.email}`, {parcelPrice}).then((result) => {
+    axiosSecure.put(`/users/${user.email}`, { parcelPrice }).then((result) => {
       console.log(result);
     });
 
@@ -104,6 +114,20 @@ const BookParcel = () => {
             type="email"
             name="email"
             value={user.email}
+            readOnly
+            className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
+          />
+        </div>
+
+        {/* Booking Date */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-600">
+            Booking Date
+          </label>
+          <input
+            type="date"
+            name="bookingDate"
+            value={getCurrentDate()}
             readOnly
             className="input input-bordered w-full bg-gray-50 border border-gray-300 rounded-md p-3"
           />

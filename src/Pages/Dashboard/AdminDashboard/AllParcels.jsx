@@ -1,39 +1,20 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const AllParcels = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
+  const axiosSecure = useAxiosSecure();
 
-  // Static data for parcels
-  const parcels = [
-    {
-      id: 1,
-      userName: "John Doe",
-      userPhone: "123-456-7890",
-      bookingDate: "2025-01-10",
-      requestedDeliveryDate: "2025-01-15",
-      cost: 200,
-      status: "Pending",
+  // data load
+  const { data: parcels = [] } = useQuery({
+    queryKey: ["all-parcels"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/all-parcels");
+      return res.data;
     },
-    {
-      id: 2,
-      userName: "Jane Smith",
-      userPhone: "098-765-4321",
-      bookingDate: "2025-01-12",
-      requestedDeliveryDate: "2025-01-17",
-      cost: 300,
-      status: "On The Way",
-    },
-    {
-      id: 3,
-      userName: "Alice Johnson",
-      userPhone: "456-789-1230",
-      bookingDate: "2025-01-11",
-      requestedDeliveryDate: "2025-01-16",
-      cost: 250,
-      status: "Delivered",
-    },
-  ];
+  });
 
   // Static data for delivery men
   const deliveryMen = [
@@ -70,17 +51,19 @@ const AllParcels = () => {
           <tbody>
             {parcels.map((parcel) => (
               <motion.tr
-                key={parcel.id}
+                key={parcel._id}
                 className="hover:bg-blue-50"
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <td className="border p-4">{parcel.userName}</td>
-                <td className="border p-4">{parcel.userPhone}</td>
-                <td className="border p-4">{parcel.bookingDate}</td>
-                <td className="border p-4">{parcel.requestedDeliveryDate}</td>
+                <td className="border p-4">{parcel.name}</td>
+                <td className="border p-4">{parcel.phone}</td>
+                <td className="border p-4">
+                  {parcel.bookingDate ? parcel.bookingDate : "N/A"}
+                </td>
+                <td className="border p-4">{parcel.deliveryDate}</td>
                 <td className="border p-4 text-green-600 font-bold">
-                  {parcel.cost} Tk
+                  {parcel.price} $
                 </td>
                 <td
                   className={`border p-4 font-semibold ${
