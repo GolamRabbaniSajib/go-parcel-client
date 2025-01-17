@@ -4,10 +4,12 @@ import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import axios from "axios";
 const MyParcels = () => {
   const [filterStatus, setFilterStatus] = useState("");
-  const {user} = useAuth()
-  const axiosSecure = useAxiosSecure()
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   const { data: parcels = [], refetch } = useQuery({
     queryKey: ["parcels"],
@@ -20,6 +22,48 @@ const MyParcels = () => {
   const filteredParcels = filterStatus
     ? parcels.filter((parcel) => parcel.status === filterStatus)
     : parcels;
+
+  const modalCancel = (id) => {
+    toast((t) => (
+      <div className="flex items-center gap-3">
+        <div>
+          <p>
+            Are You <b>Sure</b>
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <button
+            className="bg-red-400 px-3 py-1 rounded-md"
+            onClick={() => {
+              toast.dismiss(t.id);
+              handleDelete(id);
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="bg-green-400 px-3 py-1 rounded-md"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ));
+  };
+  const handleDelete = async (id) => {
+    try {
+      const { data } = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/parcels/${id}`
+      );
+      toast.success("Food Delete Successfully");
+      refetch()
+      console.log(data);
+    } catch (err) {
+      toast.error(err.message);
+      console.log(err);
+    }
+  };
   return (
     <div>
       <Helmet>
@@ -47,7 +91,7 @@ const MyParcels = () => {
             className="select select-bordered bg-white text-[#2D3748] border-gray-300 shadow-sm focus:ring focus:ring-blue-300 w-full max-w-md"
           >
             <option value="">All</option>
-            <option value="pending">Pending</option>
+            <option value="Pending">Pending</option>
             <option value="on the way">On The Way</option>
             <option value="delivered">Delivered</option>
           </select>
@@ -119,6 +163,7 @@ const MyParcels = () => {
                       Update
                     </button>
                     <button
+                      onClick={() => modalCancel(parcel._id)}
                       className={`btn btn-sm px-4 py-2 ${
                         parcel.status === "Pending"
                           ? "bg-red-500 hover:bg-red-600 text-white"
