@@ -11,6 +11,12 @@ const MyParcels = () => {
   const [filterStatus, setFilterStatus] = useState("");
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedParcel, setSelectedParcel] = useState(null);
+  const [reviewData, setReviewData] = useState({
+    rating: "",
+    feedback: "",
+  });
 
   const { data: parcels = [], refetch } = useQuery({
     queryKey: ["parcels"],
@@ -58,13 +64,45 @@ const MyParcels = () => {
         `${import.meta.env.VITE_API_URL}/parcels/${id}`
       );
       toast.success("Food Delete Successfully");
-      refetch()
+      refetch();
       console.log(data);
     } catch (err) {
       toast.error(err.message);
       console.log(err);
     }
   };
+  const handleOpenReviewModal = (parcel) => {
+    setSelectedParcel(parcel);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setReviewData({ rating: "", feedback: "" });
+  };
+
+  const handleSubmitReview = async () => {
+    if (!reviewData.rating || !reviewData.feedback) {
+      toast.error("Please fill out all fields.");
+      return;
+    }
+
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/reviews`, {
+        userName: user.name,
+        userImage: user.image || "",
+        deliveryManId: selectedParcel.deliveryManId,
+        ...reviewData,
+      });
+      toast.success("Review submitted successfully!");
+      handleCloseModal();
+      refetch();
+    } catch (error) {
+      toast.error("Failed to submit review.");
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <Helmet>
@@ -154,16 +192,17 @@ const MyParcels = () => {
                   </td>
                   <td className="py-4 px-4 space-x-2">
                     <Link to={`/dashboard/updateParcel/${parcel._id}`}>
-                    <button
-                      className={`btn btn-sm px-4 py-2 ${
-                        parcel.status === "Pending"
-                          ? "bg-blue-500 hover:bg-blue-600 text-white"
-                          : "bg-gray-300 cursor-not-allowed text-gray-600"
-                      }`}
-                      disabled={parcel.status !== "Pending"}
-                    >
-                      Update
-                    </button></Link>
+                      <button
+                        className={`btn btn-sm px-4 py-2 ${
+                          parcel.status === "Pending"
+                            ? "bg-blue-500 hover:bg-blue-600 text-white"
+                            : "bg-gray-300 cursor-not-allowed text-gray-600"
+                        }`}
+                        disabled={parcel.status !== "Pending"}
+                      >
+                        Update
+                      </button>
+                    </Link>
                     <button
                       onClick={() => modalCancel(parcel._id)}
                       className={`btn btn-sm px-4 py-2 ${
@@ -176,7 +215,10 @@ const MyParcels = () => {
                       Cancel
                     </button>
                     {parcel.status === "delivered" && (
-                      <button className="btn btn-sm px-4 py-2 bg-green-500 hover:bg-green-600 text-white">
+                      <button
+                        onClick={() => handleOpenReviewModal(parcel)}
+                        className="btn btn-sm px-4 py-2 bg-green-500 hover:bg-green-600 text-white"
+                      >
                         Review
                       </button>
                     )}
@@ -187,6 +229,84 @@ const MyParcels = () => {
           </table>
         </motion.div>
       </motion.div>
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.85, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-green-400 p-6 rounded-2xl shadow-xl w-96 transform transition-transform duration-300"
+          >
+            <h2 className="text-2xl font-bold text-white mb-4 text-center">
+              Submit Your Review
+            </h2>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-800 mb-1">
+                Name
+              </label>
+              <input
+                type="text"
+                value={user.name}
+                disabled
+                className="input input-bordered w-full bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-800 mb-1">
+                Delivery Man ID
+              </label>
+              <input
+                type="text"
+                value={selectedParcel.deliveryManId}
+                disabled
+                className="input input-bordered w-full bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-800 mb-1">
+                Rating (out of 5)
+              </label>
+              <input
+                type="number"
+                max="5"
+                min="1"
+                value={reviewData.rating}
+                onChange={(e) =>
+                  setReviewData({ ...reviewData, rating: e.target.value })
+                }
+                className="input input-bordered w-full bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-800 mb-1">
+                Feedback
+              </label>
+              <textarea
+                value={reviewData.feedback}
+                onChange={(e) =>
+                  setReviewData({ ...reviewData, feedback: e.target.value })
+                }
+                className="textarea textarea-bordered w-full bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              ></textarea>
+            </div>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={handleCloseModal}
+                className="btn btn-sm bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-lg shadow-md transform transition-transform hover:scale-105"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmitReview}
+                className="btn btn-sm bg-gradient-to-r from-yellow-400 to-yellow-300 hover:from-yellow-300 hover:to-yellow-400 text-white font-semibold px-4 py-2 rounded-lg shadow-md transform transition-transform hover:scale-105"
+              >
+                Submit
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
