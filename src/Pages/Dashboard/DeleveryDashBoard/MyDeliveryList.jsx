@@ -24,18 +24,18 @@ const MyDeliveryList = () => {
           <button
             className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition-all duration-300"
             onClick={async () => {
-              toast.dismiss(t.id); // Dismiss the toast
+              toast.dismiss(t.id);
               try {
                 const toastId = toast.loading("Cancelling booking...");
                 await axiosSecure.put(`/update-parcel/${id}`, {
                   status: "Pending",
-                  deliveryManId: '',
-                  approximateDeliveryDate: '',
+                  deliveryManId: "",
+                  approximateDeliveryDate: "",
                 });
                 toast.success("Booking cancelled successfully!", {
                   id: toastId,
                 });
-                refetch(); // Refresh the data
+                refetch();
               } catch (error) {
                 toast.error("Failed to cancel booking.");
               }
@@ -61,7 +61,7 @@ const MyDeliveryList = () => {
         status: "delivered",
       });
       toast.success("Parcel marked as delivered!", { id: toastId });
-      refetch(); // Refresh the data
+      refetch();
     } catch (error) {
       toast.error("Failed to mark as delivered.");
     }
@@ -134,14 +134,20 @@ const MyDeliveryList = () => {
                     View Location
                   </button>
                   <button
-                    className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition-all duration-300"
+                    className={`bg-red-500 text-white px-3 py-1 rounded-lg transition-all duration-300 ${
+                      parcel.status === "delivered" ? "opacity-50 cursor-not-allowed" : "hover:bg-red-700"
+                    }`}
                     onClick={() => handleCancel(parcel._id)}
+                    disabled={parcel.status === "delivered"}
                   >
                     Cancel
                   </button>
                   <button
-                    className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-700 transition-all duration-300"
+                    className={`bg-green-500 text-white px-3 py-1 rounded-lg transition-all duration-300 ${
+                      parcel.status === "delivered" ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
+                    }`}
                     onClick={() => handleDeliver(parcel._id)}
+                    disabled={parcel.status === "delivered"}
                   >
                     Deliver
                   </button>

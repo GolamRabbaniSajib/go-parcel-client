@@ -7,7 +7,7 @@ import useAuth from "../../../hooks/useAuth";
 const Sidebar = () => {
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(false);
-  const userType = "deliveryMan";
+  const userType = "uaer";
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive);
