@@ -7,7 +7,7 @@ import useAuth from "../../../hooks/useAuth";
 const Sidebar = () => {
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(false);
-  const userType = "admin";
+  const userType = "deliveryMan";
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive);
@@ -18,15 +18,17 @@ const Sidebar = () => {
       <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
         <div>
           <div className="block cursor-pointer p-4 font-bold">
+            <span className="flex items-center space-x-2">
             <Link to="/">
               <img
                 // className='hidden md:block'
-                src="https://i.ibb.co/4ZXzmq5/logo.png"
+                src={logo}
                 alt="logo"
-                width="100"
-                height="100"
+                className="rounded-full w-10"
               />
             </Link>
+            Go Parcel
+            </span>
           </div>
         </div>
 

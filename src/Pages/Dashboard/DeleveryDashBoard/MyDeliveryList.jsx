@@ -1,35 +1,78 @@
-
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const MyDeliveryList = () => {
-  // Static parcel data
-  const parcels = [
-    {
-      id: 1,
-      bookedUser: "John Doe",
-      receiverName: "Jane Doe",
-      bookedPhone: "123-456-7890",
-      requestedDate: "2025-01-10",
-      approximateDate: "2025-01-12",
-      receiverPhone: "098-765-4321",
-      receiverAddress: "123 Elm St, Springfield",
-    },
-    {
-      id: 2,
-      bookedUser: "Alice Smith",
-      receiverName: "Bob Smith",
-      bookedPhone: "987-654-3210",
-      requestedDate: "2025-01-09",
-      approximateDate: "2025-01-11",
-      receiverPhone: "876-543-2109",
-      receiverAddress: "456 Oak St, Shelbyville",
-    },
-  ];
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
-  const handleStatusChange = (parcelId, status) => {
-    toast.success(`Parcel ID ${parcelId} marked as ${status}`);
-    console.log(`Parcel ID ${parcelId} updated to ${status}`);
+  const { data: parcels = [], refetch } = useQuery({
+    queryKey: ["parcels"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/deliveryManId-parcels/${user.uid}`);
+      return res.data;
+    },
+  });
+
+  const handleCancel = async (id) => {
+    toast((t) => (
+      <div className="flex items-center gap-4">
+        <p>Are you sure you want to cancel this booking?</p>
+        <div className="flex gap-2">
+          <button
+            className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition-all duration-300"
+            onClick={async () => {
+              toast.dismiss(t.id); // Dismiss the toast
+              try {
+                const toastId = toast.loading("Cancelling booking...");
+                await axiosSecure.put(`/update-parcel/${id}`, {
+                  status: "Pending",
+                  deliveryManId: '',
+                  approximateDeliveryDate: '',
+                });
+                toast.success("Booking cancelled successfully!", {
+                  id: toastId,
+                });
+                refetch(); // Refresh the data
+              } catch (error) {
+                toast.error("Failed to cancel booking.");
+              }
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-700 transition-all duration-300"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            No
+          </button>
+        </div>
+      </div>
+    ));
+  };
+
+  const handleDeliver = async (parcelId) => {
+    try {
+      const toastId = toast.loading("Marking as delivered...");
+      await axiosSecure.put(`/update-parcel/${parcelId}`, {
+        status: "delivered",
+      });
+      toast.success("Parcel marked as delivered!", { id: toastId });
+      refetch(); // Refresh the data
+    } catch (error) {
+      toast.error("Failed to mark as delivered.");
+    }
+  };
+
+  const handleViewLocation = (location) => {
+    if (location) {
+      window.open(location, "_blank");
+    } else {
+      toast.error("Location not available for this parcel.");
+    }
   };
 
   return (
@@ -64,43 +107,41 @@ const MyDeliveryList = () => {
           <tbody>
             {parcels.map((parcel) => (
               <motion.tr
-                key={parcel.id}
+                key={parcel._id}
                 className="border-b hover:bg-gray-100"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: parcel.id * 0.2 }}
               >
-                <td className="px-4 py-2 text-center">{parcel.bookedUser}</td>
+                <td className="px-4 py-2 text-center">{parcel.name}</td>
                 <td className="px-4 py-2 text-center">{parcel.receiverName}</td>
-                <td className="px-4 py-2 text-center">{parcel.bookedPhone}</td>
+                <td className="px-4 py-2 text-center">{parcel.phone}</td>
+                <td className="px-4 py-2 text-center">{parcel.deliveryDate}</td>
                 <td className="px-4 py-2 text-center">
-                  {parcel.requestedDate}
-                </td>
-                <td className="px-4 py-2 text-center">
-                  {parcel.approximateDate}
+                  {parcel.approximateDeliveryDate || "N/A"}
                 </td>
                 <td className="px-4 py-2 text-center">
                   {parcel.receiverPhone}
                 </td>
                 <td className="px-4 py-2 text-center">
-                  {parcel.receiverAddress}
+                  {parcel.deliveryAddress}
                 </td>
                 <td className="px-4 py-2 text-center space-y-2">
                   <button
                     className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition-all duration-300"
-                    onClick={() => console.log("View Location")}
+                    onClick={() => handleViewLocation(parcel.location)}
                   >
                     View Location
                   </button>
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition-all duration-300"
-                    onClick={() => handleStatusChange(parcel.id, "Cancelled")}
+                    onClick={() => handleCancel(parcel._id)}
                   >
                     Cancel
                   </button>
                   <button
                     className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-700 transition-all duration-300"
-                    onClick={() => handleStatusChange(parcel.id, "Delivered")}
+                    onClick={() => handleDeliver(parcel._id)}
                   >
                     Deliver
                   </button>

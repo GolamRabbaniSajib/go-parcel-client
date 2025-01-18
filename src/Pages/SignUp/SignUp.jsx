@@ -28,23 +28,22 @@ const SignUp = () => {
     const userImage = res.data.data.display_url;
     const email = form.email.value;
     const password = form.password.value;
-    const userInfo = {
-      name,
-      userImage,
-      email,
-      roleType: "normalUser",
-      totalSpent: 0,
-      parcelCount: 0,
-    };
     try {
       //2. User Registration
       const result = await createUser(email, password);
+      const uid = result.user.uid;
 
       //3. Save username & profile photo
-      await updateUserProfile(
+      await updateUserProfile(name, userImage);
+      const userInfo = {
         name,
-        userImage
-      );
+        userImage,
+        email,
+        roleType: "normalUser",
+        totalSpent: 0,
+        parcelCount: 0,
+        uid,
+      };
       await axiosPublic.post("/users", userInfo).then((result) => {
         if (result.data.insertedId) {
           navigate("/");
@@ -63,6 +62,7 @@ const SignUp = () => {
       //User Registration using google
       const result = await signInWithGoogle();
       const userData = result.user;
+      console.log(userData);
       const userInfo = {
         name: userData.displayName,
         email: userData.email,
@@ -70,6 +70,7 @@ const SignUp = () => {
         roleType: "normalUser",
         totalSpent: 0,
         parcelCount: 0,
+        uid: userData.uid,
       };
       await axiosPublic.post("/users", userInfo).then((result) => {
         if (result.data.insertedId) {

@@ -93,7 +93,7 @@ const MyParcels = () => {
           >
             <option value="">All</option>
             <option value="Pending">Pending</option>
-            <option value="on the way">On The Way</option>
+            <option value="On The Way">On The Way</option>
             <option value="delivered">Delivered</option>
           </select>
         </div>
@@ -133,12 +133,12 @@ const MyParcels = () => {
                   <td className="py-4 px-4">{parcel.parcelType}</td>
                   <td className="py-4 px-4">{parcel.deliveryDate}</td>
                   <td className="py-4 px-4">
-                    {parcel.approxDeliveryDate || "N/A"}
+                    {parcel.approximateDeliveryDate || "N/A"}
                   </td>
                   <td className="py-4 px-4">
                     {new Date(parcel.bookingDate).toLocaleDateString()}
                   </td>
-                  <td className="py-4 px-4">{parcel.deliveryMenId || "N/A"}</td>
+                  <td className="py-4 px-4">{parcel.deliveryManId || "N/A"}</td>
                   <td className="py-4 px-4">
                     <span
                       className={`px-3 py-1 rounded-full text-xs ${

@@ -185,7 +185,7 @@ const AllParcels = () => {
                 >
                   <option value="">Select</option>
                   {deliveryMen.map((man) => (
-                    <option key={man._id} value={man._id}>
+                    <option key={man._id} value={man.uid}>
                       {man.name}
                     </option>
                   ))}
