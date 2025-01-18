@@ -65,6 +65,9 @@ const MyDeliveryList = () => {
     } catch (error) {
       toast.error("Failed to mark as delivered.");
     }
+    axiosSecure.put(`/delivery-user/${user.email}`, {}).then((result) => {
+      console.log(result);
+    });
   };
 
   const handleViewLocation = (location) => {

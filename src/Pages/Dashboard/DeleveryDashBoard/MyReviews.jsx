@@ -1,35 +1,20 @@
-
 import { motion } from "framer-motion";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const MyReviews = () => {
-  // Static reviews data
-  const reviews = [
-    {
-      id: 1,
-      name: "John Doe",
-      image: "https://via.placeholder.com/100",
-      date: "2025-01-12",
-      rating: 4.5,
-      feedback: "Excellent service! The delivery was on time, and everything went smoothly.",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      image: "https://via.placeholder.com/100",
-      date: "2025-01-10",
-      rating: 5,
-      feedback: "Very professional and courteous. Highly recommended!",
-    },
-    {
-      id: 3,
-      name: "Alice Brown",
-      image: "https://via.placeholder.com/100",
-      date: "2025-01-08",
-      rating: 4,
-      feedback: "Good service, but the delivery was slightly delayed. Overall satisfied.",
-    },
-  ];
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
+  const { data: reviews = [] } = useQuery({
+    queryKey: ["reviews"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/deliveryManId-reviews/${user.uid}`);
+      return res.data;
+    },
+  });
+console.log(reviews)
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <motion.h1
@@ -48,21 +33,21 @@ const MyReviews = () => {
       >
         {reviews.map((review) => (
           <motion.div
-            key={review.id}
+            key={review._id}
             className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center text-center"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: review.id * 0.2 }}
           >
             <img
-              src={review.image}
-              alt={review.name}
+              src={review.userImage}
+              alt={review.userName}
               className="w-20 h-20 rounded-full mb-4"
             />
             <h2 className="text-lg font-semibold text-gray-800">
-              {review.name}
+              {review.userName}
             </h2>
-            <p className="text-sm text-gray-500 mb-2">{review.date}</p>
+            <p className="text-sm text-gray-500 mb-2">{review.reviewDate}</p>
             <div className="flex items-center justify-center mb-4">
               <span className="text-yellow-500 text-xl font-bold mr-1">
                 {review.rating}

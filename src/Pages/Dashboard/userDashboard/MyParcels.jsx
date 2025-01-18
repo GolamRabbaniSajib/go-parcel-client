@@ -78,6 +78,8 @@ const MyParcels = () => {
     setReviewData({ rating: "", feedback: "" });
   };
 
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
   const handleSubmitReview = async () => {
     if (!reviewData.rating || !reviewData.feedback) {
       toast.error("Please fill out all fields.");
@@ -85,9 +87,10 @@ const MyParcels = () => {
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/reviews`, {
-        userName: user.name,
-        userImage: user.image || "",
+      await axiosSecure.post(`/reviews`, {
+        userName: user.displayName,
+        reviewDate: formattedDate,
+        userImage: user.photoURL || "",
         deliveryManId: selectedParcel.deliveryManId,
         ...reviewData,
       });

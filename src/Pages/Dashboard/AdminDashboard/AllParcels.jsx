@@ -95,7 +95,7 @@ const AllParcels = () => {
 
         {/* Parcels Table */}
         <motion.table
-          className="table-auto w-full border-collapse border border-gray-300 shadow-lg rounded-lg overflow-hidden bg-white"
+          className="table-auto w-full border-collapse border border-gray-300 shadow-lg rounded-lg overflow-x-auto bg-white"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
