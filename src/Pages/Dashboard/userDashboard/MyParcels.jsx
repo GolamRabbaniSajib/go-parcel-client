@@ -13,11 +13,8 @@ const MyParcels = () => {
   const axiosSecure = useAxiosSecure();
   const [showModal, setShowModal] = useState(false);
   const [selectedParcel, setSelectedParcel] = useState(null);
-  const [reviewData, setReviewData] = useState({
-    rating: "",
-    feedback: "",
-  });
-
+  const [reviewData, setReviewData] = useState({});
+  console.log(selectedParcel)
   const { data: parcels = [], refetch } = useQuery({
     queryKey: ["parcels"],
     queryFn: async () => {
@@ -247,7 +244,7 @@ const MyParcels = () => {
               </label>
               <input
                 type="text"
-                value={user.name}
+                value={user.displayName}
                 disabled
                 className="input input-bordered w-full bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />

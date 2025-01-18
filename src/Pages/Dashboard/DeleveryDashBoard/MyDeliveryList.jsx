@@ -9,13 +9,13 @@ const MyDeliveryList = () => {
   const axiosSecure = useAxiosSecure();
 
   const { data: parcels = [], refetch } = useQuery({
-    queryKey: ["parcels"],
+    queryKey: ["delivery-list-parcels"],
     queryFn: async () => {
       const res = await axiosSecure.get(`/deliveryManId-parcels/${user.uid}`);
       return res.data;
     },
   });
-
+  console.log(parcels);
   const handleCancel = async (id) => {
     toast((t) => (
       <div className="flex items-center gap-4">
@@ -135,7 +135,9 @@ const MyDeliveryList = () => {
                   </button>
                   <button
                     className={`bg-red-500 text-white px-3 py-1 rounded-lg transition-all duration-300 ${
-                      parcel.status === "delivered" ? "opacity-50 cursor-not-allowed" : "hover:bg-red-700"
+                      parcel.status === "delivered"
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-red-700"
                     }`}
                     onClick={() => handleCancel(parcel._id)}
                     disabled={parcel.status === "delivered"}
@@ -144,7 +146,9 @@ const MyDeliveryList = () => {
                   </button>
                   <button
                     className={`bg-green-500 text-white px-3 py-1 rounded-lg transition-all duration-300 ${
-                      parcel.status === "delivered" ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
+                      parcel.status === "delivered"
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-green-700"
                     }`}
                     onClick={() => handleDeliver(parcel._id)}
                     disabled={parcel.status === "delivered"}
