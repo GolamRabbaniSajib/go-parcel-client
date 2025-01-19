@@ -15,6 +15,7 @@ import AllUsers from "../Pages/Dashboard/AdminDashboard/AllUsers";
 import MyDeliveryList from "../Pages/Dashboard/DeleveryDashBoard/MyDeliveryList";
 import MyReviews from "../Pages/Dashboard/DeleveryDashBoard/MyReviews";
 import UpdatePage from "../Pages/Dashboard/userDashboard/UpdatePage";
+import StatisticsPage from "../Pages/Dashboard/AdminDashboard/StatisticsPage";
 
 export const router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ export const router = createBrowserRouter([
       {
         path: 'all-users',
         element: <AllUsers></AllUsers>
+      },
+      {
+        path: 'statistics',
+        element: <StatisticsPage></StatisticsPage>
       },
       // for delivery man
       {

@@ -65,27 +65,27 @@ const AllParcels = () => {
 
   return (
     <div className="bg-gradient-to-r from-blue-50 to-blue-100">
-      <div className="p-8 min-h-screen">
-        <h1 className="text-4xl font-bold text-blue-600 text-center mb-6 animate-pulse">
+      <div className="p-4 sm:p-8 min-h-screen">
+        <h1 className="text-2xl sm:text-4xl font-bold text-blue-600 text-center mb-6 animate-pulse">
           All Parcels
         </h1>
 
         {/* Search Section */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-wrap gap-4 mb-6 items-center">
           <input
             type="date"
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full sm:w-auto"
             value={fromDate}
             onChange={(e) => setFromDate(e.target.value)}
           />
           <input
             type="date"
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full sm:w-auto"
             value={toDate}
             onChange={(e) => setToDate(e.target.value)}
           />
           <motion.button
-            className="bg-blue-500 px-4 py-2 text-white rounded hover:bg-blue-700"
+            className="bg-blue-500 px-4 py-2 text-white rounded hover:bg-blue-700 w-full sm:w-auto"
             whileTap={{ scale: 0.9 }}
             onClick={handleSearch}
           >
@@ -94,76 +94,78 @@ const AllParcels = () => {
         </div>
 
         {/* Parcels Table */}
-        <motion.table
-          className="table-auto w-full border-collapse border border-gray-300 shadow-lg rounded-lg overflow-x-auto bg-white"
+        <motion.div
+          className="overflow-x-auto"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <thead>
-            <tr className="bg-blue-200 text-blue-800">
-              <th className="border p-4">User Name</th>
-              <th className="border p-4">Phone</th>
-              <th className="border p-4">Booking Date</th>
-              <th className="border p-4">Requested Delivery Date</th>
-              <th className="border p-4">Cost</th>
-              <th className="border p-4">Status</th>
-              <th className="border p-4">Manage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {parcels.map((parcel) => (
-              <motion.tr
-                key={parcel._id}
-                className="hover:bg-blue-50"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <td className="border p-4">{parcel.name}</td>
-                <td className="border p-4">{parcel.phone}</td>
-                <td className="border p-4">
-                  {parcel.bookingDate ? parcel.bookingDate : "N/A"}
-                </td>
-                <td className="border p-4">{parcel.deliveryDate}</td>
-                <td className="border p-4 text-green-600 font-bold">
-                  {parcel.price} $
-                </td>
-                <td
-                  className={`border p-4 font-semibold ${
-                    parcel.status === "Pending"
-                      ? "text-yellow-600"
-                      : parcel.status === "On The Way"
-                      ? "text-blue-600"
-                      : "text-green-600"
-                  }`}
+          <table className="table-auto w-full border-collapse border border-gray-300 shadow-lg rounded-lg bg-white">
+            <thead>
+              <tr className="bg-blue-200 text-blue-800 text-sm sm:text-base">
+                <th className="border p-2 sm:p-4">User Name</th>
+                <th className="border p-2 sm:p-4">Phone</th>
+                <th className="border p-2 sm:p-4">Booking Date</th>
+                <th className="border p-2 sm:p-4">Requested Delivery Date</th>
+                <th className="border p-2 sm:p-4">Cost</th>
+                <th className="border p-2 sm:p-4">Status</th>
+                <th className="border p-2 sm:p-4">Manage</th>
+              </tr>
+            </thead>
+            <tbody>
+              {parcels.map((parcel) => (
+                <motion.tr
+                  key={parcel._id}
+                  className="hover:bg-blue-50 text-sm sm:text-base"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
                 >
-                  {parcel.status}
-                </td>
-                <td className="border p-4 text-center">
-                  <motion.button
-                    className="bg-gradient-to-r from-yellow-400 to-yellow-600 px-4 py-2 text-white rounded-lg shadow-md hover:from-yellow-500 hover:to-yellow-700"
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setSelectedParcel(parcel)}
+                  <td className="border p-2 sm:p-4">{parcel.name}</td>
+                  <td className="border p-2 sm:p-4">{parcel.phone}</td>
+                  <td className="border p-2 sm:p-4">
+                    {parcel.bookingDate ? parcel.bookingDate : "N/A"}
+                  </td>
+                  <td className="border p-2 sm:p-4">{parcel.deliveryDate}</td>
+                  <td className="border p-2 sm:p-4 text-green-600 font-bold">
+                    {parcel.price} $
+                  </td>
+                  <td
+                    className={`border p-2 sm:p-4 font-semibold ${
+                      parcel.status === "Pending"
+                        ? "text-yellow-600"
+                        : parcel.status === "On The Way"
+                        ? "text-blue-600"
+                        : "text-green-600"
+                    }`}
                   >
-                    Manage
-                  </motion.button>
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </motion.table>
+                    {parcel.status}
+                  </td>
+                  <td className="border p-2 sm:p-4 text-center">
+                    <motion.button
+                      className="bg-gradient-to-r from-yellow-400 to-yellow-600 px-4 py-2 text-white rounded-lg shadow-md hover:from-yellow-500 hover:to-yellow-700"
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setSelectedParcel(parcel)}
+                    >
+                      Manage
+                    </motion.button>
+                  </td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </motion.div>
 
         {/* Modal for Managing Parcel */}
         <AnimatePresence>
           {selectedParcel && (
             <motion.div
-              className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+              className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
               <motion.div
-                className="bg-white p-6 rounded-lg shadow-lg w-96"
+                className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96"
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0.8 }}

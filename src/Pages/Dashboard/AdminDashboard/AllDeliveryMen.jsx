@@ -49,7 +49,7 @@ const AllDeliveryMen = () => {
                 </td>
                 <td className="border p-2 sm:p-4">{man.phone || "N/A"}</td>
                 <td className="border p-2 sm:p-4 text-center font-bold text-green-600">
-                  {man.parcelsDelivered || "N/A"}
+                  {man.deliveryCount || "N/A"}
                 </td>
                 <td className="border p-2 sm:p-4 text-center font-bold text-yellow-500">
                   {man.avgReview || "N/A"} ★
