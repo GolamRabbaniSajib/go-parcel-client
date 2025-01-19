@@ -1,21 +1,57 @@
 import CountUp from "react-countup";
 import Container from "../../Shared/Container";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 
 const StatisticsHome = () => {
+
+  const axiosPublic = useAxiosPublic()
+
+  // Load book parcels data
+  const { data: booked = [] } = useQuery({
+    queryKey: ["info-booked"],
+    queryFn: async () => {
+      const res = await axiosPublic.get("/info-all-parcels");
+      return res.data;
+    },
+  });
+  const bookParcels = booked.length
+
+   // Load delivered parcels data
+   const { data: delivery = [] } = useQuery({
+    queryKey: ["info-delivery"],
+    queryFn: async () => {
+      const res = await axiosPublic.get("/info-delivery");
+      return res.data;
+    },
+  });
+  const deliveredParcels = delivery.length
+  console.log(deliveredParcels)
+
+   // Load users data
+   const { data: users = [] } = useQuery({
+    queryKey: ["info-all-users"],
+    queryFn: async () => {
+      const res = await axiosPublic.get("/info-all-parcels");
+      return res.data;
+    },
+  });
+  const AllUsers = users.length
+
   const statItems = [
     {
       title: "Parcels Booked",
-      value: 60,
+      value: bookParcels,
       color: "text-yellow-500",
     },
     {
       title: "Parcels Delivered",
-      value: 86,
+      value: deliveredParcels,
       color: "text-green-500",
     },
     {
       title: "Users",
-      value: 654,
+      value: AllUsers,
       color: "text-blue-500",
     },
   ];
