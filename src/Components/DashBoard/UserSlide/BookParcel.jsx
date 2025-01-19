@@ -55,16 +55,16 @@ const BookParcel = () => {
       status: "Pending",
     };
 
-    // const phone = parcelData.phone;
+    const phone = parcelData.phone;
     const parcelPrice = parseFloat(price);
     console.log(parcelPrice);
 
     axiosSecure.put(`/users/${user.email}`, { parcelPrice }).then((result) => {
       console.log(result);
     });
-    // axiosSecure.patch(`/user-phone/${user.email}`, {
-    //   phone,
-    // });
+    axiosSecure.patch(`/user-phone/${user.email}`, {
+      phone,
+    });
     axiosSecure.post("/parcels", parcelData).then((result) => {
       if (result.data.insertedId) {
         toast.success(" Successfully Parcel Book");
