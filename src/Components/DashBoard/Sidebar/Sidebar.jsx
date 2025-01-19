@@ -1,13 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GrLogout } from "react-icons/gr";
 import { AiOutlineBars } from "react-icons/ai";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../../assets/Green and Yellow Illustrative Delivery Logo.png";
 import useAuth from "../../../hooks/useAuth";
+import useRole from "../../../hooks/useRole";
+import LoadingSpinner from "../../Shared/LoadingSpinner/LoadingSpinner";
 const Sidebar = () => {
+  const navigate = useNavigate()
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(false);
-  const userType = "admin";
+  const [roleType, isLoading] = useRole();
+  console.log(roleType);
+  useEffect(() => {
+    if (!isLoading && roleType === "admin") {
+      navigate("/dashboard/statistics");
+    }
+  }, [roleType, isLoading, navigate]);
+
+  useEffect(() => {
+    if (!isLoading && roleType === "deliveryMan") {
+      navigate("/dashboard/my-delivery-list");
+    }
+  }, [roleType, isLoading, navigate]);
+  useEffect(() => {
+    if (!isLoading && roleType === "normalUser") {
+      navigate("/dashboard/my-parcels");
+    }
+  }, [roleType, isLoading, navigate]);
+
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
+  
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive);
@@ -49,7 +74,7 @@ const Sidebar = () => {
         <div>
           <div>
             <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-yellow-100 mx-auto">
-              <Link to={'/'}>
+              <Link to={"/"}>
                 <span className="flex items-center space-x-3 text-2xl font-bold">
                   <img
                     // className='hidden md:block'
@@ -66,7 +91,7 @@ const Sidebar = () => {
           {/* Nav Items */}
           <div className="flex flex-col justify-between items-center flex-1 mt-6">
             <ul className="menu bg-gray-100 space-y-8 p-4 rounded-box">
-              {userType === "user" && (
+              {roleType === "normalUser" && (
                 <>
                   <li>
                     <NavLink
@@ -106,7 +131,7 @@ const Sidebar = () => {
                   </li>
                 </>
               )}
-              {userType === "deliveryMan" && (
+              {roleType === "deliveryMan" && (
                 <>
                   <li>
                     <NavLink
@@ -134,7 +159,7 @@ const Sidebar = () => {
                   </li>
                 </>
               )}
-              {userType === "admin" && (
+              {roleType === "admin" && (
                 <>
                   <li>
                     <NavLink
