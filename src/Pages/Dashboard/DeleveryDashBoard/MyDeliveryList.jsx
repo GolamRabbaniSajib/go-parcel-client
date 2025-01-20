@@ -15,7 +15,6 @@ const MyDeliveryList = () => {
       return res.data;
     },
   });
-  console.log(parcels);
   const handleCancel = async (id) => {
     toast((t) => (
       <div className="flex items-center gap-4">
@@ -66,7 +65,7 @@ const MyDeliveryList = () => {
       toast.error("Failed to mark as delivered.");
     }
     axiosSecure.put(`/delivery-user/${user.email}`, {}).then((result) => {
-      console.log(result);
+      
     });
   };
 

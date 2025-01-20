@@ -105,18 +105,23 @@ const AllUsers = () => {
                   $ {user.totalSpent || "N/A"}
                 </td>
                 <td className="border p-2 sm:p-4 text-center space-y-2 sm:space-y-0 sm:space-x-2">
-                  <button
-                    onClick={() => handleMakeDeliveryMen(user._id)}
-                    className="bg-yellow-500 px-2 sm:px-4 py-1 rounded-lg text-black cursor-pointer hover:bg-yellow-700"
-                  >
-                    Make Delivery Man
-                  </button>
-                  <button
-                    onClick={() => handleMakeAdmin(user._id)}
-                    className="bg-red-500 px-2 sm:px-4 py-1 rounded-lg text-white cursor-pointer hover:bg-red-700"
-                  >
-                    Make Admin
-                  </button>
+                  {user?.roleType !== "deliveryMan" && (
+                    <button
+                      onClick={() => handleMakeDeliveryMen(user._id)}
+                      className="bg-yellow-500 px-2 sm:px-4 py-1 rounded-lg text-black cursor-pointer hover:bg-yellow-700"
+                    >
+                      Make Delivery Man
+                    </button>
+                  )}
+
+                  {user?.roleType !== "admin" && (
+                    <button
+                      onClick={() => handleMakeAdmin(user._id)}
+                      className="bg-red-500 px-2 sm:px-4 py-1 rounded-lg text-white cursor-pointer hover:bg-red-700"
+                    >
+                      Make Admin
+                    </button>
+                  )}
                 </td>
               </motion.tr>
             ))}

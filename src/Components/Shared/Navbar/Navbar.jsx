@@ -17,7 +17,7 @@ const Navbar = () => {
         <Container>
           <div className="flex flex-row  items-center justify-between gap-3 md:gap-0">
             <Link to="/">
-              <img src={logo} alt="logo" className="h-8 w-8" />
+              <img src={logo} alt="logo" className="h-10 w-10 rounded-full" /> 
             </Link>
             <div className="flex items-center space-x-4">
               <NavLink to={"/"}>Home</NavLink>

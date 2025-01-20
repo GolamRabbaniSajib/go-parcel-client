@@ -5,7 +5,10 @@ import { Link } from "react-router-dom";
 const PaymentSuccess = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <div>
+
       <Confetti />
+      </div>
       <h1 className="text-3xl font-bold text-green-600 mb-4">
         Payment Successful!
       </h1>

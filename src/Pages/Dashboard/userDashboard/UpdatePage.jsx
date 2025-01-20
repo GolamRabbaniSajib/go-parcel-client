@@ -57,14 +57,13 @@ const UpdatePage = () => {
     };
 
     axiosSecure.put(`/update-parcel/${id}`, parcelData).then((result) => {
-      console.log(result.data);
+      
       if (result.data.modifiedCount) {
         navigate("/dashboard/my-parcels");
         toast.success("Parcel Update Successful");
       }
     });
 
-    console.log("Order Data:", parcelData);
   };
   return (
     <motion.div

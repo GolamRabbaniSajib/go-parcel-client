@@ -50,7 +50,6 @@ const SignUp = () => {
           toast.success("Signup Successful");
         }
       });
-      console.log(result);
     } catch (err) {
       toast.error(err?.message);
     }
@@ -62,7 +61,6 @@ const SignUp = () => {
       //User Registration using google
       const result = await signInWithGoogle();
       const userData = result.user;
-      console.log(userData);
       const userInfo = {
         name: userData.displayName,
         email: userData.email,

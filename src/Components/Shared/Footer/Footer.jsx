@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Container from "../Container";
+import { FaFacebook, FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -13,7 +14,7 @@ const Footer = () => {
         <div className=" px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Parcel Management</h3>
+              <h3 className="text-2xl font-bold mb-4">GO PARCEL</h3>
               <p className="text-gray-400">
                 Simplify your deliveries with our reliable and fast service.
               </p>
@@ -52,25 +53,25 @@ const Footer = () => {
                   href="https://facebook.com"
                   className="text-gray-400 hover:text-white"
                 >
-                  <i className="fab fa-facebook-f"></i>
+                  <FaFacebook />
                 </a>
                 <a
                   href="https://twitter.com"
                   className="text-gray-400 hover:text-white"
                 >
-                  <i className="fab fa-twitter"></i>
+                  <FaTwitter />
                 </a>
                 <a
                   href="https://instagram.com"
                   className="text-gray-400 hover:text-white"
                 >
-                  <i className="fab fa-instagram"></i>
+                  <FaInstagram />
                 </a>
                 <a
                   href="https://linkedin.com"
                   className="text-gray-400 hover:text-white"
                 >
-                  <i className="fab fa-linkedin-in"></i>
+                  <FaLinkedinIn />
                 </a>
               </div>
             </div>

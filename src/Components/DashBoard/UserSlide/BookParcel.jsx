@@ -57,10 +57,9 @@ const BookParcel = () => {
 
     const phone = parcelData.phone;
     const parcelPrice = parseFloat(price);
-    console.log(parcelPrice);
 
     axiosSecure.put(`/users/${user.email}`, { parcelPrice }).then((result) => {
-      console.log(result);
+      
     });
     axiosSecure.patch(`/user-phone/${user.email}`, {
       phone,
@@ -71,7 +70,6 @@ const BookParcel = () => {
       }
     });
 
-    console.log("Order Data:", parcelData);
   };
   return (
     <motion.div

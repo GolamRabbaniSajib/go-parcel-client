@@ -26,13 +26,12 @@ const StatisticsHome = () => {
     },
   });
   const deliveredParcels = delivery.length
-  console.log(deliveredParcels)
 
    // Load users data
    const { data: users = [] } = useQuery({
     queryKey: ["info-all-users"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/info-all-parcels");
+      const res = await axiosPublic.get("/info-users");
       return res.data;
     },
   });

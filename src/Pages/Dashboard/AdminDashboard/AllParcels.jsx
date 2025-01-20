@@ -126,7 +126,7 @@ const AllParcels = () => {
                     {parcel.bookingDate ? parcel.bookingDate : "N/A"}
                   </td>
                   <td className="border p-2 sm:p-4">{parcel.deliveryDate}</td>
-                  <td className="border p-2 sm:p-4 text-green-600 font-bold">
+                  <td className="border p-2 sm:p-4 text-yellow-600 font-bold">
                     {parcel.price} $
                   </td>
                   <td
@@ -135,18 +135,19 @@ const AllParcels = () => {
                         ? "text-yellow-600"
                         : parcel.status === "On The Way"
                         ? "text-blue-600"
-                        : "text-green-600"
+                        : "text-blue-600"
                     }`}
                   >
                     {parcel.status}
                   </td>
                   <td className="border p-2 sm:p-4 text-center">
                     <motion.button
-                      className="bg-gradient-to-r from-yellow-400 to-yellow-600 px-4 py-2 text-white rounded-lg shadow-md hover:from-yellow-500 hover:to-yellow-700"
+                      className="bg-gradient-to-r from-green-400 to-green-600 px-4 py-2 text-white rounded-lg shadow-md hover:from-green-500 hover:to-green-700"
                       whileTap={{ scale: 0.9 }}
+                      disabled={parcel.status === "delivered"}
                       onClick={() => setSelectedParcel(parcel)}
                     >
-                      Manage
+                      {parcel.status === "delivered" ? "Delivered" : "Manage"}
                     </motion.button>
                   </td>
                 </motion.tr>

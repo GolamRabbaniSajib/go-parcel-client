@@ -14,7 +14,7 @@ const MyParcels = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [reviewData, setReviewData] = useState({});
-  console.log(selectedParcel);
+  
   const { data: parcels = [], refetch } = useQuery({
     queryKey: ["parcels"],
     queryFn: async () => {
@@ -57,15 +57,12 @@ const MyParcels = () => {
   };
   const handleDelete = async (id) => {
     try {
-      const { data } = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/parcels/${id}`
+      const { data } = await axiosSecure.delete(`/parcels/${id}`
       );
       toast.success("Food Delete Successfully");
       refetch();
-      console.log(data);
     } catch (err) {
       toast.error(err.message);
-      console.log(err);
     }
   };
   const handleOpenReviewModal = (parcel) => {

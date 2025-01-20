@@ -17,7 +17,7 @@ const CheckOutForm = ({ price }) => {
 
   useEffect(() => {
     axiosSecure.post("/create-checkout-session", { price }).then((res) => {
-      console.log(res.data.clientSecret);
+      
       setClientSecret(res.data.clientSecret);
     });
   }, [axiosSecure, price]);
@@ -42,7 +42,7 @@ const CheckOutForm = ({ price }) => {
       console.error("Payment Error:", error.message);
       setError(error.message);
     } else {
-      console.log("Payment Method:", paymentMethod);
+      
 
       setError("");
     }
@@ -60,7 +60,7 @@ const CheckOutForm = ({ price }) => {
         },
       });
     if (confirmError) {
-      console.log("error");
+      
     } else {
       if (paymentIntent.status === "succeeded") {
         toast.success("Payment successful!");
