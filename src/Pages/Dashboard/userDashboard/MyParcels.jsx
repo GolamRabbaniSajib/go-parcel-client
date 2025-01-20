@@ -14,7 +14,7 @@ const MyParcels = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [reviewData, setReviewData] = useState({});
-  console.log(selectedParcel)
+  console.log(selectedParcel);
   const { data: parcels = [], refetch } = useQuery({
     queryKey: ["parcels"],
     queryFn: async () => {
@@ -79,7 +79,7 @@ const MyParcels = () => {
   };
 
   const today = new Date();
-  const formattedDate = today.toISOString().split('T')[0];
+  const formattedDate = today.toISOString().split("T")[0];
   const handleSubmitReview = async () => {
     if (!reviewData.rating || !reviewData.feedback) {
       toast.error("Please fill out all fields.");
@@ -222,6 +222,14 @@ const MyParcels = () => {
                         Review
                       </button>
                     )}
+                    <Link
+                      to={"/dashboard/payments"}
+                      state={{ price: parcel.price }}
+                    >
+                      <button className="btn btn-sm px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white">
+                        Pay
+                      </button>
+                    </Link>
                   </td>
                 </motion.tr>
               ))}

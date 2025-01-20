@@ -16,6 +16,7 @@ import MyDeliveryList from "../Pages/Dashboard/DeleveryDashBoard/MyDeliveryList"
 import MyReviews from "../Pages/Dashboard/DeleveryDashBoard/MyReviews";
 import UpdatePage from "../Pages/Dashboard/userDashboard/UpdatePage";
 import StatisticsPage from "../Pages/Dashboard/AdminDashboard/StatisticsPage";
+import Payments from "../Pages/Dashboard/userDashboard/Payments";
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard/updateParcel/:id',
         element: <UpdatePage></UpdatePage>
+      },
+      {
+        path: 'payments',
+        element: <Payments></Payments>
       },
       // for admin
       {
