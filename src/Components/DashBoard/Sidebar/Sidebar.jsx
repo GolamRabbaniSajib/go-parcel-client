@@ -1,4 +1,3 @@
-
 import { GrLogout } from "react-icons/gr";
 import { AiOutlineBars } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
@@ -8,32 +7,13 @@ import useRole from "../../../hooks/useRole";
 import LoadingSpinner from "../../Shared/LoadingSpinner/LoadingSpinner";
 import { useState } from "react";
 const Sidebar = () => {
-  // const navigate = useNavigate()
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(false);
   const [roleType, isLoading] = useRole();
-  console.log(roleType);
-  // useEffect(() => {
-  //   if (!isLoading && roleType === "admin") {
-  //     navigate("/dashboard/statistics");
-  //   }
-  // }, [roleType, isLoading, navigate]);
-
-  // useEffect(() => {
-  //   if (!isLoading && roleType === "deliveryMan") {
-  //     navigate("/dashboard/my-delivery-list");
-  //   }
-  // }, [roleType, isLoading, navigate]);
-  // useEffect(() => {
-  //   if (!isLoading && roleType === "normalUser") {
-  //     navigate("/dashboard/my-parcels");
-  //   }
-  // }, [roleType, isLoading, navigate]);
-
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
   }
-  
+
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive);

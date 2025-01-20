@@ -5,9 +5,11 @@ import logo from "../../../assets/Green and Yellow Illustrative Delivery Logo.pn
 import { motion } from "framer-motion";
 import useAuth from "../../../hooks/useAuth";
 import { IoNotificationsCircleSharp } from "react-icons/io5";
+import useRole from "../../../hooks/useRole";
 const Navbar = () => {
   const { user, logOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [roleType] = useRole();
 
   return (
     <div className="fixed w-full bg-yellow-500 z-20 shadow-sm">
@@ -18,8 +20,10 @@ const Navbar = () => {
               <img src={logo} alt="logo" className="h-8 w-8" />
             </Link>
             <div className="flex items-center space-x-4">
-              <NavLink to={'/'}>Home</NavLink>
-              <p><IoNotificationsCircleSharp className="text-4xl" /></p>
+              <NavLink to={"/"}>Home</NavLink>
+              <p>
+                <IoNotificationsCircleSharp className="text-4xl" />
+              </p>
               {user && user?.displayName ? (
                 <div className="relative">
                   <img
@@ -39,9 +43,30 @@ const Navbar = () => {
                         <p className="font-bold">{user.displayName}</p>
                       </div>
                       <>
-                        
-                          <Link to="/dashboard"><div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">Dashboard</div></Link>
-                        
+                        {roleType === "admin" && (
+                          <Link to={"dashboard/statistics"}>
+                            <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
+                              Dashboard
+                            </div>
+                          </Link>
+                        )}
+
+                        {roleType === "deliveryMan" && (
+                          <Link to={"dashboard/my-delivery-list"}>
+                            <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
+                              Dashboard
+                            </div>
+                          </Link>
+                        )}
+
+                        {roleType === "normalUser" && (
+                          <Link to={"dashboard/my-parcels"}>
+                            <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
+                              Dashboard
+                            </div>
+                          </Link>
+                        )}
+
                         <div
                           onClick={logOut}
                           className="px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer"

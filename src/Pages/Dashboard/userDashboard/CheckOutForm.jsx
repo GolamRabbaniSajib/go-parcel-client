@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
 const CheckOutForm = ({ price }) => {
   const { user } = useAuth();
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const [error, setError] = useState("");
+  const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState("");
@@ -41,7 +43,7 @@ const CheckOutForm = ({ price }) => {
       setError(error.message);
     } else {
       console.log("Payment Method:", paymentMethod);
-      toast.success("Payment successful!");
+
       setError("");
     }
 
@@ -61,7 +63,9 @@ const CheckOutForm = ({ price }) => {
       console.log("error");
     } else {
       if (paymentIntent.status === "succeeded") {
+        toast.success("Payment successful!");
         setTransactionId(paymentIntent.id);
+        navigate("/dashboard/payment-success");
       }
     }
   };

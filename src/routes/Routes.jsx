@@ -17,6 +17,7 @@ import MyReviews from "../Pages/Dashboard/DeleveryDashBoard/MyReviews";
 import UpdatePage from "../Pages/Dashboard/userDashboard/UpdatePage";
 import StatisticsPage from "../Pages/Dashboard/AdminDashboard/StatisticsPage";
 import Payments from "../Pages/Dashboard/userDashboard/Payments";
+import PaymentSuccess from "../Pages/Dashboard/userDashboard/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -62,12 +63,16 @@ export const router = createBrowserRouter([
         element: <Profile></Profile>,
       },
       {
-        path: '/dashboard/updateParcel/:id',
-        element: <UpdatePage></UpdatePage>
+        path: 'payment-success',
+        element: <PaymentSuccess></PaymentSuccess>
       },
       {
-        path: 'payments',
-        element: <Payments></Payments>
+        path: "/dashboard/updateParcel/:id",
+        element: <UpdatePage></UpdatePage>,
+      },
+      {
+        path: "payments",
+        element: <Payments></Payments>,
       },
       // for admin
       {
@@ -75,26 +80,26 @@ export const router = createBrowserRouter([
         element: <AllParcels></AllParcels>,
       },
       {
-        path: 'all-delivery-men',
-        element: <AllDeliveryMen></AllDeliveryMen>
+        path: "all-delivery-men",
+        element: <AllDeliveryMen></AllDeliveryMen>,
       },
       {
-        path: 'all-users',
-        element: <AllUsers></AllUsers>
+        path: "all-users",
+        element: <AllUsers></AllUsers>,
       },
       {
-        path: 'statistics',
-        element: <StatisticsPage></StatisticsPage>
+        path: "statistics",
+        element: <StatisticsPage></StatisticsPage>,
       },
       // for delivery man
       {
-        path: 'my-delivery-list',
-        element: <MyDeliveryList></MyDeliveryList>
+        path: "my-delivery-list",
+        element: <MyDeliveryList></MyDeliveryList>,
       },
       {
-        path: 'my-reviews',
-        element: <MyReviews></MyReviews>
-      }
+        path: "my-reviews",
+        element: <MyReviews></MyReviews>,
+      },
     ],
   },
 ]);

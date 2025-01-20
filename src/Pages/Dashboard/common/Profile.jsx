@@ -2,10 +2,32 @@ import { Helmet } from "react-helmet-async";
 import coverImg from "../../../assets/cover.jpg";
 import useAuth from "../../../hooks/useAuth";
 import { motion } from "framer-motion";
-const Profile = () => {
-  const { user } = useAuth();
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import toast from "react-hot-toast";
+const image_hosting_key = import.meta.env.VITE_IMAGE_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
-  console.log(user);
+const Profile = () => {
+  const { user, updateUserProfile } = useAuth();
+  const axiosPublic = useAxiosPublic();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // get image link
+
+    const imageFile = { image: event.target.image.files[0] };
+
+    const res = await axiosPublic.post(image_hosting_api, imageFile, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    const userImage = res.data.data.display_url;
+    const name = user?.displayName;
+    // Save username & profile photo
+    await updateUserProfile(name, userImage);
+    toast.success('image successfully change')
+  };
+
   return (
     <div className="flex justify-center items-center h-screen">
       <Helmet>
@@ -26,8 +48,7 @@ const Profile = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         />
         <div className="flex flex-col items-center justify-center p-4 -mt-16">
-          <motion.a
-            href="#"
+          <motion.div
             className="relative block"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -38,16 +59,7 @@ const Profile = () => {
               src={user.photoURL}
               className="mx-auto object-cover rounded-full h-24 w-24 border-2 border-white"
             />
-          </motion.a>
-
-          <motion.p
-            className="p-2 px-4 text-xs text-white bg-yellow-500 rounded-full"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            Customer
-          </motion.p>
+          </motion.div>
 
           <motion.p
             className="mt-2 text-xl font-medium text-gray-800"
@@ -64,7 +76,7 @@ const Profile = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <div className="flex flex-wrap items-center justify-between text-sm text-gray-600">
+            <div className="flex flex-wrap items-center justify-between text-sm text-gray-600 mb-4">
               <p className="flex flex-col">
                 Name
                 <span className="font-bold text-black">{user.displayName}</span>
@@ -73,21 +85,33 @@ const Profile = () => {
                 Email
                 <span className="font-bold text-black">{user.email}</span>
               </p>
-
-              <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.7 }}
-              >
-                <button className="bg-yellow-500 px-10 py-1 rounded-lg text-black cursor-pointer hover:bg-yellow-800 block mb-1">
-                  Update Profile
-                </button>
-                <button className="bg-yellow-500 px-7 py-1 rounded-lg text-black cursor-pointer hover:bg-yellow-800">
-                  Change Password
-                </button>
-              </motion.div>
             </div>
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col items-center space-y-4"
+            >
+              <div>
+                <label
+                  htmlFor="image"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Upload Profile Picture
+                </label>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  accept="image/*"
+                  className="w-full bg-gray-50 text-gray-800 border border-gray-300 rounded-md px-4 py-2 cursor-pointer focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-yellow-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-yellow-600 transition"
+              >
+                Update Profile Picture
+              </button>
+            </form>
           </motion.div>
         </div>
       </motion.div>
