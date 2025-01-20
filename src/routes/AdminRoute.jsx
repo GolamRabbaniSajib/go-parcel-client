@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import useRole from "../hooks/useRole";
 
-const adminRoute = ({ children }) => {
+const AdminRoute = ({ children }) => {
   const [roleType, isLoading] = useRole();
 
   if (isLoading) return <LoadingSpinner />;
@@ -13,4 +13,4 @@ PrivateRoute.propTypes = {
   children: PropTypes.element,
 };
 
-export default adminRoute;
+export default AdminRoute;

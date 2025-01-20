@@ -18,6 +18,8 @@ import UpdatePage from "../Pages/Dashboard/userDashboard/UpdatePage";
 import StatisticsPage from "../Pages/Dashboard/AdminDashboard/StatisticsPage";
 import Payments from "../Pages/Dashboard/userDashboard/Payments";
 import PaymentSuccess from "../Pages/Dashboard/userDashboard/PaymentSuccess";
+import AdminRoute from "./AdminRoute";
+import DeliveryManRoute from "./DeliveryManRoute";
 
 export const router = createBrowserRouter([
   {
@@ -60,45 +62,97 @@ export const router = createBrowserRouter([
       },
       {
         path: "my-profile",
-        element: <Profile></Profile>,
+        element: (
+          <PrivateRoute>
+            <Profile></Profile>
+          </PrivateRoute>
+        ),
       },
       {
-        path: 'payment-success',
-        element: <PaymentSuccess></PaymentSuccess>
+        path: "payment-success",
+        element: (
+          <PrivateRoute>
+            <PaymentSuccess></PaymentSuccess>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/updateParcel/:id",
-        element: <UpdatePage></UpdatePage>,
+        element: (
+          <PrivateRoute>
+            <UpdatePage></UpdatePage>
+          </PrivateRoute>
+        ),
       },
       {
         path: "payments",
-        element: <Payments></Payments>,
+        element: (
+          <PrivateRoute>
+            <Payments></Payments>
+          </PrivateRoute>
+        ),
       },
       // for admin
       {
         path: "all-parcels",
-        element: <AllParcels></AllParcels>,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AllParcels></AllParcels>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "all-delivery-men",
-        element: <AllDeliveryMen></AllDeliveryMen>,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AllDeliveryMen></AllDeliveryMen>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "all-users",
-        element: <AllUsers></AllUsers>,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AllUsers></AllUsers>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "statistics",
-        element: <StatisticsPage></StatisticsPage>,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <StatisticsPage></StatisticsPage>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
       // for delivery man
       {
         path: "my-delivery-list",
-        element: <MyDeliveryList></MyDeliveryList>,
+        element: (
+          <PrivateRoute>
+            <DeliveryManRoute>
+              <MyDeliveryList></MyDeliveryList>
+            </DeliveryManRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "my-reviews",
-        element: <MyReviews></MyReviews>,
+        element: (
+          <PrivateRoute>
+            <DeliveryManRoute>
+              <MyReviews></MyReviews>
+            </DeliveryManRoute>
+          </PrivateRoute>
+        ),
       },
     ],
   },
