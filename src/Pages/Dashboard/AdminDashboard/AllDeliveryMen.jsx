@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 
 const AllDeliveryMen = () => {
   const axiosSecure = useAxiosSecure();
@@ -16,6 +17,9 @@ const AllDeliveryMen = () => {
 
   return (
     <div className="p-4 sm:p-8 bg-gradient-to-r from-green-50 to-green-100 min-h-screen">
+      <Helmet>
+        <title> Go parcel | AllDeliveryMen</title>
+      </Helmet>
       <h1 className="text-2xl sm:text-4xl font-bold text-green-600 text-center mb-6 animate-pulse">
         All Delivery Men
       </h1>

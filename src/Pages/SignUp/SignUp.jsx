@@ -4,6 +4,7 @@ import useAuth from "../../hooks/useAuth";
 import { toast } from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { Helmet } from "react-helmet-async";
 const image_hosting_key = import.meta.env.VITE_IMAGE_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 const SignUp = () => {
@@ -82,6 +83,9 @@ const SignUp = () => {
   };
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100">
+      <Helmet>
+        <title> Go parcel | signup</title>
+      </Helmet>
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full border border-gray-200">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-blue-600 mb-2">

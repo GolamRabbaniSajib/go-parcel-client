@@ -3,6 +3,7 @@ import { toast } from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 
 const MyDeliveryList = () => {
   const { user } = useAuth();
@@ -64,9 +65,7 @@ const MyDeliveryList = () => {
     } catch (error) {
       toast.error("Failed to mark as delivered.");
     }
-    axiosSecure.put(`/delivery-user/${user.email}`, {}).then((result) => {
-      
-    });
+    axiosSecure.put(`/delivery-user/${user.email}`, {}).then((result) => {});
   };
 
   const handleViewLocation = (location) => {
@@ -79,6 +78,9 @@ const MyDeliveryList = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
+      <Helmet>
+        <title> Go parcel | AllDeliveryList</title>
+      </Helmet>
       <motion.h1
         className="text-3xl font-bold text-center text-gray-800 mb-6"
         initial={{ opacity: 0, y: -20 }}

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 
 const MyReviews = () => {
   const { user } = useAuth();
@@ -16,6 +17,9 @@ const MyReviews = () => {
   });
   return (
     <div className="min-h-screen bg-gray-50 p-6">
+      <Helmet>
+        <title> Go parcel | MyReviews</title>
+      </Helmet>
       <motion.h1
         className="text-3xl font-bold text-center text-gray-800 mb-6"
         initial={{ opacity: 0, y: -20 }}

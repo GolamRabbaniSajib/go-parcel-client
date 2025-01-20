@@ -1,6 +1,7 @@
 import Chart from "react-apexcharts";
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import { Helmet } from "react-helmet-async";
 
 const StatisticsPage = () => {
   const [bookingsByDate, setBookingsByDate] = useState([]);
@@ -34,6 +35,9 @@ const StatisticsPage = () => {
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
+      <Helmet>
+        <title> Go parcel | StatisticsPage</title>
+      </Helmet>
       <h1 className="text-3xl font-bold text-center mb-8">Statistics</h1>
 
       {/* Bar Chart */}
@@ -52,8 +56,6 @@ const StatisticsPage = () => {
           height={350}
         />
       </div>
-
-      
     </div>
   );
 };

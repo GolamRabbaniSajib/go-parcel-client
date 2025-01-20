@@ -5,9 +5,10 @@ import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 import LoadingSpinner from "../../Components/Shared/LoadingSpinner/LoadingSpinner";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { Helmet } from "react-helmet-async";
 
 const Login = () => {
-  const axiosPublic = useAxiosPublic()
+  const axiosPublic = useAxiosPublic();
   const { signIn, signInWithGoogle, loading, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,6 +58,9 @@ const Login = () => {
   };
   return (
     <div className="flex justify-center items-center min-h-screen bg-white">
+      <Helmet>
+        <title> Go parcel | login</title>
+      </Helmet>
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
         <div className="mb-8 text-center">
           <h1 className="my-3 text-4xl font-bold">Log In</h1>

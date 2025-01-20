@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -65,6 +66,9 @@ const AllUsers = () => {
 
   return (
     <div className="p-4 sm:p-8 bg-gradient-to-r from-yellow-50 to-yellow-100 min-h-screen">
+      <Helmet>
+              <title> Go parcel | AllUsers</title>
+            </Helmet>
       <h1 className="text-2xl sm:text-4xl font-bold text-yellow-600 text-center mb-6 animate-pulse">
         All Users
       </h1>

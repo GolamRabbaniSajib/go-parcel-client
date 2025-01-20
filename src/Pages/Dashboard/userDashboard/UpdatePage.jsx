@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 const UpdatePage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -57,13 +58,11 @@ const UpdatePage = () => {
     };
 
     axiosSecure.put(`/update-parcel/${id}`, parcelData).then((result) => {
-      
       if (result.data.modifiedCount) {
         navigate("/dashboard/my-parcels");
         toast.success("Parcel Update Successful");
       }
     });
-
   };
   return (
     <motion.div
@@ -72,6 +71,9 @@ const UpdatePage = () => {
       transition={{ duration: 0.5 }}
       className="container mx-auto py-12"
     >
+      <Helmet>
+        <title> Go parcel | update</title>
+      </Helmet>
       <motion.h1
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}

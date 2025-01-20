@@ -3,6 +3,7 @@ import { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
 const AllParcels = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
@@ -65,6 +66,9 @@ const AllParcels = () => {
 
   return (
     <div className="bg-gradient-to-r from-blue-50 to-blue-100">
+      <Helmet>
+        <title> Go parcel | AllParcels</title>
+      </Helmet>
       <div className="p-4 sm:p-8 min-h-screen">
         <h1 className="text-2xl sm:text-4xl font-bold text-blue-600 text-center mb-6 animate-pulse">
           All Parcels

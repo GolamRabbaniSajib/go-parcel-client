@@ -3,10 +3,13 @@ import { motion } from "framer-motion";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 const BookParcel = () => {
   const { user } = useAuth();
   const [price, setPrice] = useState(0);
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   // Get today's date in 'YYYY-MM-DD' format
   const getCurrentDate = () => {
@@ -58,18 +61,18 @@ const BookParcel = () => {
     const phone = parcelData.phone;
     const parcelPrice = parseFloat(price);
 
-    axiosSecure.put(`/users/${user.email}`, { parcelPrice }).then((result) => {
-      
-    });
+    axiosSecure
+      .put(`/users/${user.email}`, { parcelPrice })
+      .then((result) => {});
     axiosSecure.patch(`/user-phone/${user.email}`, {
       phone,
     });
     axiosSecure.post("/parcels", parcelData).then((result) => {
       if (result.data.insertedId) {
         toast.success(" Successfully Parcel Book");
+        navigate("/dashboard/my-parcels");
       }
     });
-
   };
   return (
     <motion.div
@@ -78,6 +81,9 @@ const BookParcel = () => {
       transition={{ duration: 0.5 }}
       className="container mx-auto py-12"
     >
+      <Helmet>
+        <title> Go parcel | BookParcel</title>
+      </Helmet>
       <motion.h1
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
