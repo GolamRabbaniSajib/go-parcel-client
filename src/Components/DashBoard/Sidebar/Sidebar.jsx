@@ -10,6 +10,7 @@ const Sidebar = () => {
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(false);
   const [roleType, isLoading] = useRole();
+  console.log(roleType)
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
   }
@@ -72,7 +73,7 @@ const Sidebar = () => {
           {/* Nav Items */}
           <div className="flex flex-col justify-between items-center flex-1 mt-6">
             <ul className="menu bg-gray-100 space-y-8 p-4 rounded-box">
-              {roleType === "normalUser" && (
+              {roleType?.normalUser === true && (
                 <>
                   <li>
                     <NavLink
@@ -112,7 +113,7 @@ const Sidebar = () => {
                   </li>
                 </>
               )}
-              {roleType === "deliveryMan" && (
+              {roleType?.deliveryMan === true && (
                 <>
                   <li>
                     <NavLink
@@ -140,7 +141,7 @@ const Sidebar = () => {
                   </li>
                 </>
               )}
-              {roleType === "admin" && (
+              {roleType?.admin === true && (
                 <>
                   <li>
                     <NavLink

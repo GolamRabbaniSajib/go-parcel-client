@@ -43,7 +43,7 @@ const Navbar = () => {
                         <p className="font-bold">{user.displayName}</p>
                       </div>
                       <>
-                        {roleType === "admin" && (
+                        {roleType?.admin === true && (
                           <Link to={"dashboard/statistics"}>
                             <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
                               Dashboard
@@ -51,7 +51,7 @@ const Navbar = () => {
                           </Link>
                         )}
 
-                        {roleType === "deliveryMan" && (
+                        {roleType?.deliveryMan === true && (
                           <Link to={"dashboard/my-delivery-list"}>
                             <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
                               Dashboard
@@ -59,7 +59,7 @@ const Navbar = () => {
                           </Link>
                         )}
 
-                        {roleType === "normalUser" && (
+                        {roleType?.normalUser === true && (
                           <Link to={"dashboard/my-parcels"}>
                             <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
                               Dashboard

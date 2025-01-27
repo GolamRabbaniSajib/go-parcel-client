@@ -7,8 +7,8 @@ const AdminRoute = ({ children }) => {
   const [roleType, isLoading] = useRole();
 
   if (isLoading) return <LoadingSpinner></LoadingSpinner>;
-  if (roleType === "admin") return children;
-  return <Navigate to="/dashboard" state={{ from: location }} replace="true" />;
+  if (roleType?.admin === true) return children;
+  return <Navigate to="/login" state={{ from: location }} replace="true" />;
 };
 
 AdminRoute.propTypes = {

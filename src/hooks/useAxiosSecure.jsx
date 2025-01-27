@@ -1,32 +1,38 @@
 import axios from "axios";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
-
-export const axiosSecure = axios.create({
+const axiosSecure = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true,
 });
-
 const useAxiosSecure = () => {
   const navigate = useNavigate();
   const { logOut } = useAuth();
-  useEffect(() => {
-    axiosSecure.interceptors.response.use(
-      (res) => {
-        return res;
-      },
-      async (error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          // logout
-          await logOut();
-          // navigate to login
-          navigate("/login");
-        }
-        return Promise.reject(error);
+  axiosSecure.interceptors.request.use(
+    function (config) {
+      const token = localStorage.getItem("access-token");
+      // console.log("request stop", token);
+      config.headers.authorization = `bearer ${token}`;
+      return config;
+    },
+    function (error) {
+      return Promise.reject(error);
+    }
+  );
+
+  axiosSecure.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const status = error.response.status;
+      // console.log(status)
+      if (status === 401 || status === 403) {
+        await logOut();
+        navigate("/login");
       }
-    );
-  }, [logOut, navigate]);
+      return Promise.reject(error);
+    }
+  );
   return axiosSecure;
 };
 
