@@ -5,7 +5,6 @@ import LoadingSpinner from "../Components/Shared/LoadingSpinner/LoadingSpinner";
 
 const DeliveryManRoute = ({ children }) => {
   const [roleType, isLoading] = useRole();
-  console.log(roleType)
 
   if (isLoading) return <LoadingSpinner></LoadingSpinner>;
   if (roleType?.deliveryMan === true) return children;
