@@ -1,220 +1,120 @@
 import { GrLogout } from "react-icons/gr";
-import { AiOutlineBars } from "react-icons/ai";
+import { AiOutlineBars, AiFillCloseCircle } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../../assets/Green and Yellow Illustrative Delivery Logo.png";
 import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
 import LoadingSpinner from "../../Shared/LoadingSpinner/LoadingSpinner";
 import { useState } from "react";
+
 const Sidebar = () => {
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(false);
   const [roleType, isLoading] = useRole();
+
   if (isLoading) {
-    return <LoadingSpinner></LoadingSpinner>;
+    return <LoadingSpinner />;
   }
 
-  // Sidebar Responsive Handler
+  // Sidebar Toggle Handler
   const handleToggle = () => {
     setActive(!isActive);
   };
+
   return (
     <>
-      {/* Small Screen Navbar */}
-      <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
-        <div>
-          <div className="block cursor-pointer p-4 font-bold">
-            <span className="flex items-center space-x-2">
-              <Link to="/">
-                <img
-                  // className='hidden md:block'
-                  src={logo}
-                  alt="logo"
-                  className="rounded-full w-10"
-                />
-              </Link>
-              Go Parcel
-            </span>
-          </div>
+      {/* Mobile Navbar */}
+      <div className="bg-black text-white flex justify-between md:hidden p-4">
+        <div className="flex items-center space-x-2">
+          <img src={logo} alt="logo" className="w-10 rounded-full" />
+          <span className="font-bold text-lg">Go Parcel</span>
         </div>
-
-        <button
-          onClick={handleToggle}
-          className="mobile-menu-button p-4 focus:outline-none focus:bg-gray-200"
-        >
-          <AiOutlineBars className="h-5 w-5" />
+        <button onClick={handleToggle} className="focus:outline-none">
+          {isActive ? (
+            <AiFillCloseCircle className="w-6 h-6 text-red-400" />
+          ) : (
+            <AiOutlineBars className="w-6 h-6" />
+          )}
         </button>
       </div>
 
       {/* Sidebar */}
       <div
-        className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
-          isActive && "-translate-x-full"
-        }  md:translate-x-0  transition duration-200 ease-in-out`}
+        className={`fixed z-10 flex flex-col justify-between h-screen bg-gray-900 bg-opacity-90 backdrop-blur-lg w-64 p-5 shadow-xl text-white transform ${
+          isActive ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 transition-transform duration-300 ease-in-out`}
       >
-        <div>
-          <div>
-            <div className="w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-yellow-100 mx-auto">
-              <Link to={"/"}>
-                <span className="flex items-center space-x-3 text-2xl font-bold">
-                  <img
-                    // className='hidden md:block'
-                    src={logo}
-                    alt="logo"
-                    className="w-10 rounded-full mr-2"
-                  />
-                  Go Parcel
-                </span>
-              </Link>
-            </div>
-          </div>
-
-          {/* Nav Items */}
-          <div className="flex flex-col justify-between items-center flex-1 mt-6">
-            <ul className="menu bg-gray-100 space-y-8 p-4 rounded-box">
-              {roleType?.normalUser === true && (
-                <>
-                  <li>
-                    <NavLink
-                      to="/dashboard/book-parcel"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "bg-yellow-500 text-white font-bold py-2 px-6 rounded-xl"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-yellow-600"
-                      }
-                    >
-                      Book a Parcel
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/dashboard/my-parcels"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "bg-yellow-500 text-white font-bold py-2 px-6 rounded-xl"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-yellow-600"
-                      }
-                    >
-                      My Parcels
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/dashboard/my-profile"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "bg-yellow-500 text-white font-bold py-2 px-6 rounded-xl"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-yellow-600"
-                      }
-                    >
-                      My Profile
-                    </NavLink>
-                  </li>
-                </>
-              )}
-              {roleType?.deliveryMan === true && (
-                <>
-                  <li>
-                    <NavLink
-                      to="/dashboard/my-delivery-list"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "bg-yellow-500 text-white font-bold py-2 px-6 rounded-xl"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-yellow-600"
-                      }
-                    >
-                      My Delivery List
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/dashboard/my-reviews"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "bg-yellow-500 text-white font-bold py-2 px-6 rounded-xl"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-yellow-600"
-                      }
-                    >
-                      My Reviews
-                    </NavLink>
-                  </li>
-                </>
-              )}
-              {roleType?.admin === true && (
-                <>
-                  <li>
-                    <NavLink
-                      to="/dashboard/all-parcels"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "bg-yellow-500 text-white font-bold py-2 px-6 rounded-xl"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-yellow-600"
-                      }
-                    >
-                      All Parcels
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/dashboard/all-users"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "bg-yellow-500 text-white font-bold py-2 px-6 rounded-xl"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-yellow-600"
-                      }
-                    >
-                      All Users
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/dashboard/all-delivery-men"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "bg-yellow-500 text-white font-bold py-2 px-6 rounded-xl"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-yellow-600"
-                      }
-                    >
-                      All Delivery Men
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to="/dashboard/statistics"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "bg-yellow-500 text-white font-bold py-2 px-6 rounded-xl"
-                          : "text-gray-600 hover:bg-yellow-100 hover:text-yellow-600"
-                      }
-                    >
-                      Statistics
-                    </NavLink>
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
+        {/* Logo Section */}
+        <div className="text-center py-4">
+          <Link to="/">
+            <img src={logo} alt="logo" className="w-12 mx-auto rounded-full" />
+          </Link>
+          <h2 className="text-xl font-bold mt-2">Go Parcel</h2>
         </div>
 
-        <div>
-          <hr />
-
-          {/* <MenuItem
-            icon={FcSettings}
-            label="Profile"
-            address="/dashboard/profile"
-          /> */}
-          <button
-            onClick={logOut}
-            className="flex w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform"
-          >
-            <GrLogout className="w-5 h-5" />
-
-            <span className="mx-4 font-medium">Logout</span>
-          </button>
+        {/* Navigation Items */}
+        <div className="flex-1">
+          <ul className="space-y-6">
+            {roleType?.normalUser && (
+              <>
+                <NavItem to="/dashboard/book-parcel" label="Book a Parcel" />
+                <NavItem to="/dashboard/my-parcels" label="My Parcels" />
+                <NavItem to="/dashboard/my-profile" label="My Profile" />
+              </>
+            )}
+            {roleType?.deliveryMan && (
+              <>
+                <NavItem
+                  to="/dashboard/my-delivery-list"
+                  label="My Delivery List"
+                />
+                <NavItem to="/dashboard/my-reviews" label="My Reviews" />
+              </>
+            )}
+            {roleType?.admin && (
+              <>
+                <NavItem to="/dashboard/all-parcels" label="All Parcels" />
+                <NavItem to="/dashboard/all-users" label="All Users" />
+                <NavItem
+                  to="/dashboard/all-delivery-men"
+                  label="All Delivery Men"
+                />
+                <NavItem to="/dashboard/statistics" label="Statistics" />
+              </>
+            )}
+          </ul>
         </div>
+
+        {/* Logout Button */}
+        <button
+          onClick={logOut}
+          className="w-full flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-lg transition-all"
+        >
+          <GrLogout className="w-5 h-5" />
+          <span>Logout</span>
+        </button>
       </div>
     </>
+  );
+};
+
+// Reusable Nav Item Component
+const NavItem = ({ to, label }) => {
+  return (
+    <li>
+      <NavLink
+        to={to}
+        className={({ isActive }) =>
+          `block px-4 py-2 rounded-lg transition-all ${
+            isActive
+              ? "bg-green-500 text-white"
+              : "hover:bg-green-700 hover:text-white"
+          }`
+        }
+      >
+        {label}
+      </NavLink>
+    </li>
   );
 };
 
