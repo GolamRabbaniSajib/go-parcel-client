@@ -44,7 +44,7 @@ const TopDeliveryMen = () => {
                 <img
                   src={man.userImage}
                   alt={man.name}
-                  className="w-24 h-24 rounded-full mx-auto mb-4"
+                  className="w-24 h-24 object-cover rounded-full mx-auto mb-4"
                 />
                 <h3 className="text-xl font-semibold mb-2">{man.name}</h3>
                 <p className="text-gray-600 mb-2">
