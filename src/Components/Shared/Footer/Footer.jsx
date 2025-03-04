@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
 import Container from "../Container";
-import { FaFacebook, FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaLinkedinIn,
+  FaTwitter,
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -39,9 +45,7 @@ const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="/about" className="hover:underline">
-                    About Us
-                  </a>
+                  <Link to={"/aboutUs"}>About Us</Link>
                 </li>
               </ul>
             </div>

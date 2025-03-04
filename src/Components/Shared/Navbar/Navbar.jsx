@@ -5,25 +5,61 @@ import logo from "../../../assets/Green and Yellow Illustrative Delivery Logo.pn
 import { motion } from "framer-motion";
 import useAuth from "../../../hooks/useAuth";
 import { IoNotificationsCircleSharp } from "react-icons/io5";
+import { FaBars, FaTimes } from "react-icons/fa"; // Hamburger menu icons
 import useRole from "../../../hooks/useRole";
+
 const Navbar = () => {
   const { user, logOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [roleType] = useRole();
 
+  const toggleMenu = () => setIsOpen(!isOpen);
+
   return (
     <div className="fixed w-full bg-yellow-500 z-20 shadow-sm">
       <div className="py-4">
         <Container>
-          <div className="flex flex-row  items-center justify-between gap-3 md:gap-0">
+          <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
             <Link to="/">
-              <img src={logo} alt="logo" className="h-10 w-10 rounded-full" /> 
+              <img src={logo} alt="logo" className="h-10 w-10 rounded-full" />
             </Link>
-            <div className="flex items-center space-x-4">
-              <NavLink to={"/"}>Home</NavLink>
+
+            {/* Mobile Hamburger Icon */}
+            <div className="md:hidden" onClick={toggleMenu}>
+              <FaBars className="text-3xl text-white cursor-pointer" />
+            </div>
+
+            {/* Desktop Navigation Links */}
+            <div className="hidden md:flex items-center space-x-4">
+              <NavLink
+                to="/"
+                className="text-white hover:text-gray-800 transition duration-300"
+              >
+                Home
+              </NavLink>
+              <NavLink
+                to="/products"
+                className="text-white hover:text-gray-800 transition duration-300"
+              >
+                Products
+              </NavLink>
+              <NavLink
+                to="/contact"
+                className="text-white hover:text-gray-800 transition duration-300"
+              >
+                Contact
+              </NavLink>
+              <NavLink
+                to="/about"
+                className="text-white hover:text-gray-800 transition duration-300"
+              >
+                About Us
+              </NavLink>
               <p>
                 <IoNotificationsCircleSharp className="text-4xl" />
               </p>
+
+              {/* User Profile */}
               {user && user?.displayName ? (
                 <div className="relative">
                   <img
@@ -86,6 +122,107 @@ const Navbar = () => {
               )}
             </div>
           </div>
+
+          {/* Mobile Menu (Hamburger) */}
+          {isOpen && (
+            <div className="md:hidden absolute top-20 left-0 w-full bg-yellow-500 z-10 shadow-lg">
+              <div className="flex flex-col items-center space-y-4 py-4">
+                <NavLink
+                  to="/"
+                  className="text-white hover:text-gray-800 transition duration-300"
+                  onClick={toggleMenu}
+                >
+                  Home
+                </NavLink>
+                <NavLink
+                  to="/products"
+                  className="text-white hover:text-gray-800 transition duration-300"
+                  onClick={toggleMenu}
+                >
+                  Products
+                </NavLink>
+                <NavLink
+                  to="/contact"
+                  className="text-white hover:text-gray-800 transition duration-300"
+                  onClick={toggleMenu}
+                >
+                  Contact
+                </NavLink>
+                <NavLink
+                  to="/about"
+                  className="text-white hover:text-gray-800 transition duration-300"
+                  onClick={toggleMenu}
+                >
+                  About Us
+                </NavLink>
+                <p className="text-white text-xl">
+                  <IoNotificationsCircleSharp className="text-4xl" />
+                </p>
+
+                {/* User Profile */}
+                {user && user?.displayName ? (
+                  <div className="relative">
+                    <img
+                      src={user?.photoURL}
+                      alt="Profile"
+                      className="h-10 w-10 rounded-full cursor-pointer border-2 border-gray-200"
+                      onClick={() => setIsOpen(!isOpen)}
+                    />
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg"
+                      >
+                        <div className="p-4 border-b">
+                          <p className="font-bold">{user.displayName}</p>
+                        </div>
+                        <>
+                          {roleType?.admin === true && (
+                            <Link to={"dashboard/statistics"}>
+                              <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
+                                Dashboard
+                              </div>
+                            </Link>
+                          )}
+
+                          {roleType?.deliveryMan === true && (
+                            <Link to={"dashboard/my-delivery-list"}>
+                              <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
+                                Dashboard
+                              </div>
+                            </Link>
+                          )}
+
+                          {roleType?.normalUser === true && (
+                            <Link to={"dashboard/my-parcels"}>
+                              <div className="px-4 py-3 hover:bg-neutral-100 transition font-semibold">
+                                Dashboard
+                              </div>
+                            </Link>
+                          )}
+
+                          <div
+                            onClick={logOut}
+                            className="px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer"
+                          >
+                            Logout
+                          </div>
+                        </>
+                      </motion.div>
+                    )}
+                  </div>
+                ) : (
+                  <Link to="/login">
+                    <button className="px-4 py-2 bg-green-400 rounded hover:bg-green-700 transition duration-300">
+                      Login
+                    </button>
+                  </Link>
+                )}
+              </div>
+            </div>
+          )}
         </Container>
       </div>
     </div>

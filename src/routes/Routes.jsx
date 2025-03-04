@@ -20,6 +20,9 @@ import Payments from "../Pages/Dashboard/userDashboard/Payments";
 import PaymentSuccess from "../Pages/Dashboard/userDashboard/PaymentSuccess";
 import AdminRoute from "./AdminRoute";
 import DeliveryManRoute from "./DeliveryManRoute";
+import AboutUs from "../Pages/AboutUs/AboutUs";
+import ContractUs from "../Pages/Contract/ContractUs";
+import Features from "../Pages/Features/Features";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +34,18 @@ export const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      {
+        path: '/aboutUs',
+        element: <AboutUs></AboutUs>
+      },
+      {
+        path: 'contact',
+        element: <ContractUs></ContractUs>
+      },
+      {
+        path: 'features',
+        element: <Features></Features>
+      }
     ],
   },
   { path: "/login", element: <Login /> },
